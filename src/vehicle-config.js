@@ -14,6 +14,13 @@ export const WINDOW_DEFS = [
 
 export const BOOT_DEF = { key: "boot_entity", id: "boot", label: "Boot", short: "Boot" };
 
+export const HEADLIGHT_DEF = {
+  key: "headlights_entity",
+  id: "headlights",
+  label: "Headlights",
+  short: "Headlights",
+};
+
 export const VEHICLE_OPTIONS = [{ value: "hatchback", label: "Hatchback" }];
 
 export const UNIT_OPTIONS = [

@@ -283,6 +283,16 @@ export const styles = css`
     fill: #e7eef3;
     stroke: #90a0aa;
     stroke-width: 1;
+    stroke-linejoin: round;
+  }
+
+  .headlight.is-open {
+    fill: #fff3b0;
+    stroke: #e6c85a;
+  }
+
+  .headlight.interactive {
+    cursor: pointer;
   }
 
   .taillight {

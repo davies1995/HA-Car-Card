@@ -10,6 +10,7 @@ The first vehicle plan is a hatchback. The vehicle list is a setting, so more pl
 - Doors drawn open when their entity is on or open
 - Side windows highlighted red when down, whether the door is open or shut
 - Boot highlighted when open
+- Headlights turn pale yellow when their entity is on
 - Battery percentage with an icon that changes with the level
 - Mileage and range, each with its own source unit, converted into the display unit you choose
 
@@ -48,6 +49,7 @@ front_right_window_entity: binary_sensor.my_car_front_right_window
 rear_left_window_entity: binary_sensor.my_car_rear_left_window
 rear_right_window_entity: binary_sensor.my_car_rear_right_window
 boot_entity: binary_sensor.my_car_boot
+headlights_entity: binary_sensor.my_car_headlights
 battery_entity: sensor.my_car_battery
 mileage_entity: sensor.my_car_odometer
 mileage_unit: mi
@@ -71,6 +73,7 @@ A door, window, or the boot counts as open when the entity is `on`, `open`, `dow
 | `front_left_door_entity` | Front left door. Also `front_right`, `rear_left`, and `rear_right`. |
 | `front_left_window_entity` | Front left window. Also the other three side windows. |
 | `boot_entity` | Boot or tailgate. |
+| `headlights_entity` | Turns both headlights pale yellow when on. |
 | `battery_entity` | Battery state of charge, usually a percentage. |
 | `mileage_entity` | Odometer. |
 | `mileage_unit` | `mi` or `km`, the unit that entity reports. |
