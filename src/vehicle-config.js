@@ -21,7 +21,10 @@ export const HEADLIGHT_DEF = {
   short: "Headlights",
 };
 
-export const VEHICLE_OPTIONS = [{ value: "hatchback", label: "Hatchback" }];
+export const VEHICLE_OPTIONS = [
+  { value: "hatchback", label: "Hatchback" },
+  { value: "vw-id3", label: "VW ID.3" },
+];
 
 export const UNIT_OPTIONS = [
   { value: "mi", label: "Miles" },

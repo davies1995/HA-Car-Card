@@ -185,6 +185,39 @@ export const styles = css`
     display: block;
   }
 
+  .plan svg.id3 {
+    width: min(100%, 250px);
+  }
+
+  .plan-art {
+    pointer-events: none;
+  }
+
+  .id3-zone {
+    fill: transparent;
+    stroke: none;
+  }
+
+  .id3-zone.door-zone.is-open,
+  .id3-zone.window-zone.is-open {
+    fill: var(--error-color, #e53935);
+    fill-opacity: 0.62;
+  }
+
+  .id3-zone.boot-zone.is-open {
+    fill: var(--warning-color, #fb8c00);
+    fill-opacity: 0.5;
+  }
+
+  .id3-zone.light-zone.is-open {
+    fill: #fff3b0;
+    fill-opacity: 0.92;
+  }
+
+  .id3-zone.interactive {
+    cursor: pointer;
+  }
+
   .body {
     fill: #f7f8fa;
     stroke: #3e474f;

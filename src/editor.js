@@ -42,7 +42,7 @@ const SCHEMA = [
     {
       name: "car_model",
       label: "Vehicle plan",
-      helper: "Top-down view drawn on the card. More vehicles can be added here later.",
+      helper: "Top-down view drawn on the card. Choose VW ID.3 for the ID.3 plan. More vehicles can be added here later.",
       selector: {
         select: {
           mode: "dropdown",
