@@ -21,6 +21,27 @@ export const HEADLIGHT_DEF = {
   short: "Headlights",
 };
 
+export const CHARGE_CABLE_DEF = {
+  key: "charge_cable_entity",
+  id: "charge-cable",
+  label: "Charge cable",
+  short: "Charge cable",
+};
+
+export const CHARGING_DEF = {
+  key: "charging_entity",
+  id: "charging",
+  label: "Charging",
+  short: "Charging",
+};
+
+export const LOCK_DEF = {
+  key: "lock_entity",
+  id: "lock",
+  label: "Lock",
+  short: "Lock",
+};
+
 export const VEHICLE_OPTIONS = [
   { value: "hatchback", label: "Hatchback" },
   { value: "vw-id3", label: "VW ID.3" },
@@ -48,15 +69,52 @@ const OPEN_STATES = new Set([
 
 const CLOSED_STATES = new Set(["off", "closed", "up", "false", "no", "shut", "0"]);
 
+function normalizedState(stateObj) {
+  if (!stateObj) return "";
+  return String(stateObj.state).trim().toLowerCase();
+}
+
+function isUnavailableState(state) {
+  return ["unavailable", "unknown", "none", ""].includes(state);
+}
+
 export function isOpen(stateObj) {
-  if (!stateObj) return false;
-  const state = String(stateObj.state).trim().toLowerCase();
-  if (["unavailable", "unknown", "none", ""].includes(state)) return false;
+  const state = normalizedState(stateObj);
+  if (!state || isUnavailableState(state)) return false;
   if (OPEN_STATES.has(state)) return true;
   if (CLOSED_STATES.has(state)) return false;
   const numeric = Number(state);
   if (Number.isFinite(numeric)) return numeric > 0;
   return stateObj.attributes?.open === true;
+}
+
+const CABLE_CONNECTED = new Set(["connected", "plugged", "plugged_in", "plugged in", ...OPEN_STATES]);
+const CABLE_DISCONNECTED = new Set(["disconnected", "unplugged", "not connected", "not_connected", ...CLOSED_STATES]);
+
+export function isCableConnected(stateObj) {
+  const state = normalizedState(stateObj);
+  if (!state || isUnavailableState(state)) return false;
+  if (CABLE_CONNECTED.has(state)) return true;
+  if (CABLE_DISCONNECTED.has(state)) return false;
+  const numeric = Number(state);
+  if (Number.isFinite(numeric)) return numeric > 0;
+  return false;
+}
+
+export function isCharging(stateObj) {
+  const state = normalizedState(stateObj);
+  if (!state || isUnavailableState(state)) return null;
+  if (["charging", "charge", "on", "true", "yes"].includes(state)) return true;
+  if (["not charging", "not_charging", "not-charging", "off", "false", "no"].includes(state)) return false;
+  return null;
+}
+
+export function lockStatus(stateObj) {
+  const state = normalizedState(stateObj);
+  if (!state || isUnavailableState(state)) return "";
+  if (["unlocked", "unlock"].includes(state)) return "unlocked";
+  if (["locked", "lock"].includes(state)) return "locked";
+  return "";
 }
 
 const KM_PER_MILE = 1.609344;

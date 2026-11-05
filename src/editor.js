@@ -1,5 +1,15 @@
 import { LitElement, html, css } from "lit";
-import { DOOR_DEFS, WINDOW_DEFS, BOOT_DEF, HEADLIGHT_DEF, VEHICLE_OPTIONS, UNIT_OPTIONS } from "./vehicle-config.js";
+import {
+  DOOR_DEFS,
+  WINDOW_DEFS,
+  BOOT_DEF,
+  HEADLIGHT_DEF,
+  CHARGE_CABLE_DEF,
+  CHARGING_DEF,
+  LOCK_DEF,
+  VEHICLE_OPTIONS,
+  UNIT_OPTIONS,
+} from "./vehicle-config.js";
 
 const OPEN_DOMAINS = ["binary_sensor", "sensor", "cover"];
 
@@ -50,6 +60,12 @@ const SCHEMA = [
         },
       },
     },
+    {
+      name: "white_background",
+      label: "White background",
+      helper: "Fills the plan with white so the black lines stay easy to see.",
+      selector: { boolean: {} },
+    },
   ]),
   section(
     "Doors",
@@ -76,6 +92,25 @@ const SCHEMA = [
   ]),
   section("Headlights", [
     entityField(HEADLIGHT_DEF.key, HEADLIGHT_DEF.label, "On turns both headlights pale yellow."),
+  ]),
+  section("Charging", [
+    entityField(
+      CHARGE_CABLE_DEF.key,
+      "Charge cable",
+      "When this reports connected, on, or plugged in, a Type 2 connector appears beside the charge port."
+    ),
+    entityField(
+      CHARGING_DEF.key,
+      "Charging",
+      'Use a sensor that reports "charging" or "not charging". The connector is green while charging and red when it is not.'
+    ),
+  ]),
+  section("Lock", [
+    entityField(
+      LOCK_DEF.key,
+      "Lock",
+      'Sensor that reports "locked" or "unlocked". A green open padlock means unlocked, and a red padlock means locked.'
+    ),
   ]),
   section("Battery", [
     {
