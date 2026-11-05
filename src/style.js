@@ -171,6 +171,180 @@ export const styles = css`
     background-color: var(--success-color, var(--state-sensor-battery-high-color, #4caf50));
   }
 
+  .plan {
+    margin: 0 0 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .plan svg {
+    width: min(100%, 280px);
+    height: auto;
+    display: block;
+  }
+
+  .body {
+    fill: #f7f8fa;
+    stroke: #3e474f;
+    stroke-width: 2;
+    stroke-linejoin: round;
+  }
+
+  .hood {
+    fill: #eef1f4;
+    stroke: #9aa3ab;
+    stroke-width: 1;
+  }
+
+  .badge {
+    fill: #dfe5ea;
+    stroke: #6d7780;
+    stroke-width: 1;
+  }
+
+  .glass,
+  .window {
+    fill: #c5d8e8;
+    stroke: #5f7280;
+    stroke-width: 1.4;
+    stroke-linejoin: round;
+  }
+
+  .window {
+    transition: fill 0.2s ease;
+  }
+
+  .window.is-open {
+    fill: var(--error-color, #e53935);
+    stroke: #b71c1c;
+  }
+
+  .door-panel {
+    fill: #f7f8fa;
+    stroke: #3e474f;
+    stroke-width: 1.6;
+    stroke-linejoin: round;
+  }
+
+  .aperture {
+    fill: #2c3136;
+    stroke: none;
+  }
+
+  .boot {
+    fill: #f7f8fa;
+    stroke: #3e474f;
+    stroke-width: 1.6;
+    stroke-linejoin: round;
+  }
+
+  .boot.is-open {
+    fill: var(--warning-color, #fb8c00);
+    stroke: #e65100;
+  }
+
+  .window.interactive,
+  .door-panel.interactive,
+  .boot.interactive {
+    cursor: pointer;
+  }
+
+  .window:focus-visible,
+  .door-panel:focus-visible,
+  .boot:focus-visible {
+    outline: none;
+    stroke: var(--primary-color);
+    stroke-width: 2.5;
+  }
+
+  .roof {
+    fill: #6d747c;
+    stroke: #555c63;
+    stroke-width: 1;
+  }
+
+  .wheel rect {
+    fill: #2c3136;
+  }
+
+  .wheel .rim {
+    fill: #a3acb4;
+  }
+
+  .mirror {
+    fill: #eceff1;
+    stroke: #3e474f;
+    stroke-width: 1.5;
+  }
+
+  .headlight {
+    fill: #e7eef3;
+    stroke: #90a0aa;
+    stroke-width: 1;
+  }
+
+  .taillight {
+    fill: #ef9a9a;
+    stroke: #c62828;
+    stroke-width: 0.75;
+  }
+
+  .antenna {
+    fill: #4e555c;
+  }
+
+  .plan-alert,
+  .plan-key {
+    margin: 0;
+    font-size: 0.85rem;
+    text-align: center;
+    color: var(--secondary-text-color);
+  }
+
+  .plan-alert {
+    color: var(--error-color, #e53935);
+    font-weight: 600;
+  }
+
+  .battery {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    margin-bottom: 12px;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: var(--secondary-background-color, rgba(0, 0, 0, 0.05));
+    color: inherit;
+    font: inherit;
+    text-align: left;
+  }
+
+  button.battery {
+    cursor: pointer;
+  }
+
+  .battery ha-icon {
+    --mdc-icon-size: 32px;
+    color: var(--primary-color);
+  }
+
+  .battery ha-icon.low {
+    color: var(--error-color, #f44336);
+  }
+
+  .battery ha-icon.medium {
+    color: var(--warning-color, #ff9800);
+  }
+
+  .battery-copy {
+    flex: 1;
+    min-width: 0;
+  }
+
   .empty {
     color: var(--secondary-text-color);
     font-size: 0.95rem;
@@ -178,7 +352,8 @@ export const styles = css`
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .progress-fill {
+    .progress-fill,
+    .window {
       transition: none;
     }
   }

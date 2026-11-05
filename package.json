@@ -1,7 +1,7 @@
 {
   "name": "ha-car-info-card",
-  "version": "1.0.0",
-  "description": "Custom Home Assistant Lovelace card for vehicle battery, range, location, and charging status",
+  "version": "1.2.0",
+  "description": "Home Assistant card with a configurable vehicle plan, doors, windows, boot, battery, mileage, and range",
   "main": "dist/car-info-card.js",
   "module": "dist/car-info-card.js",
   "type": "module",
