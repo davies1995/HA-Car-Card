@@ -54,7 +54,7 @@ function zone(model, kind, points, openWord, onSelect) {
 
 export function renderBmw3Series({ doors, windows, boot, headlights, summary, onSelect }) {
   return svg`
-    <svg class="bmw" viewBox="0 0 352 800" role="img" aria-label="Top view of a BMW 3 Series, front at the top. ${summary}">
+    <svg class="bmw" viewBox="-1 0 352 800" role="img" aria-label="Top view of a BMW 3 Series, front at the top. ${summary}">
       ${zone(doors["front-left"], "door-zone", SIDES["front-left"].door, "open", onSelect)}
       ${zone(doors["front-right"], "door-zone", SIDES["front-right"].door, "open", onSelect)}
       ${zone(doors["rear-left"], "door-zone", SIDES["rear-left"].door, "open", onSelect)}
