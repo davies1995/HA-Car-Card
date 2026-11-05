@@ -1,0 +1,37 @@
+{
+  "name": "ha-car-info-card",
+  "version": "1.0.0",
+  "description": "Custom Home Assistant Lovelace card for vehicle battery, range, location, and charging status",
+  "main": "dist/car-info-card.js",
+  "module": "dist/car-info-card.js",
+  "type": "module",
+  "files": [
+    "dist/car-info-card.js"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "watch": "rollup -c -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davies1995/HA-Car-Card.git"
+  },
+  "keywords": [
+    "home-assistant",
+    "homeassistant",
+    "hacs",
+    "lovelace",
+    "custom-card"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "lit": "^3.1.2"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-terser": "^1.0.2",
+    "rollup": "^4.12.0"
+  }
+}
