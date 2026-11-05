@@ -1,8 +1,8 @@
 # Car Info Card
 
-A Home Assistant Lovelace card that shows a top-down plan of a vehicle. Doors swing open, windows turn red when they are down, and the boot is highlighted when it is open. The card also shows battery state of charge, mileage, and range, and can convert mileage and range between miles and kilometres.
+A Home Assistant Lovelace card that shows a top-down plan of a vehicle. On the hatchback plan the doors swing open. On the VW ID.3 plan the doors, windows, boot, and headlights are highlighted in place. Windows turn red when they are down, and the boot is highlighted when it is open. The card also shows battery state of charge, mileage, and range, and can convert mileage and range between miles and kilometres.
 
-The first vehicle plan is a hatchback. The vehicle list is a setting, so more plans can be added later.
+Choose the plan in the card settings. Hatchback is the drawn plan. VW ID.3 uses the ID.3 line drawing, with doors, windows, the boot, and headlights highlighted in place.
 
 ## Features
 
@@ -34,12 +34,12 @@ HACS downloads `car-info-card.js` from the latest GitHub release. Publishing a r
 
 ## Usage
 
-Add **Car Info Card** from the card picker. The editor is grouped into Vehicle, Doors, Windows, Boot, Battery, and Mileage and range.
+Add **Car Info Card** from the card picker. The editor is grouped into Vehicle, Doors, Windows, Boot, Headlights, Battery, and Mileage and range.
 
 ```yaml
 type: custom:car-info-card
 title: My Vehicle
-car_model: hatchback
+car_model: vw-id3
 front_left_door_entity: binary_sensor.my_car_front_left_door
 front_right_door_entity: binary_sensor.my_car_front_right_door
 rear_left_door_entity: binary_sensor.my_car_rear_left_door
@@ -69,7 +69,7 @@ A door, window, or the boot counts as open when the entity is `on`, `open`, `dow
 | Option | Description |
 | --- | --- |
 | `title` | Card title. Defaults to `My Vehicle`. |
-| `car_model` | Plan to draw. Currently `hatchback`. |
+| `car_model` | Plan to draw. `hatchback` or `vw-id3`. |
 | `front_left_door_entity` | Front left door. Also `front_right`, `rear_left`, and `rear_right`. |
 | `front_left_window_entity` | Front left window. Also the other three side windows. |
 | `boot_entity` | Boot or tailgate. |

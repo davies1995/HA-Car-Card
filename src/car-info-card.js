@@ -16,7 +16,7 @@ import {
 import { getVehicle } from "./vehicles/index.js";
 import "./editor.js";
 
-const VERSION = "1.3.0";
+const VERSION = "1.4.0";
 const UNAVAILABLE = new Set(["unavailable", "unknown", "none", ""]);
 
 console.info(
@@ -284,7 +284,7 @@ if (!window.customCards.some((card) => card.type === "car-info-card")) {
     type: "car-info-card",
     name: "Car Info Card",
     preview: true,
-    description: "Top-down vehicle plan with doors, windows, boot, battery, mileage, and range.",
+    description: "Top-down vehicle plan, including a VW ID.3, with doors, windows, boot, headlights, battery, mileage, and range.",
     documentationURL: "https://github.com/davies1995/HA-Car-Card",
   });
 }
