@@ -233,11 +233,15 @@ export const styles = css`
 
   .plan-canvas {
     position: relative;
-    display: inline-block;
+    display: flex;
+    justify-content: center;
+    width: fit-content;
+    max-width: 100%;
+    margin-inline: auto;
   }
 
   .plan-canvas.has-plug {
-    padding-right: 34px;
+    padding-inline: 34px;
   }
 
   .charge-plug {
@@ -257,20 +261,10 @@ export const styles = css`
     top: 68%;
   }
 
-  .plan-canvas.tesla-model-3.has-plug {
-    padding-right: 0;
-    padding-left: 34px;
-  }
-
   .plan-canvas.tesla-model-3 .charge-plug {
     right: auto;
     left: 2px;
     top: 91%;
-  }
-
-  .plan-canvas.bmw-3-series.has-plug {
-    padding-right: 0;
-    padding-left: 34px;
   }
 
   .plan-canvas.bmw-3-series .charge-plug {
@@ -292,7 +286,8 @@ export const styles = css`
   }
 
   .plan-canvas > svg {
-    width: min(100%, 280px);
+    width: 280px;
+    max-width: 100%;
     height: auto;
     display: block;
   }
@@ -300,7 +295,7 @@ export const styles = css`
   .plan-canvas > svg.id3,
   .plan-canvas > svg.tesla,
   .plan-canvas > svg.bmw {
-    width: min(100%, 250px);
+    width: 250px;
   }
 
   .charge-plug .glyph,
