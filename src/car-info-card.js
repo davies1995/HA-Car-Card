@@ -1,9 +1,10 @@
 import { LitElement, html, nothing } from "lit";
 import { styleMap } from "lit/directives/style-map.js";
 import { styles } from "./style.js";
+import { WINDOW_DEFS, isWindowOpen, renderCarPlan } from "./car-plan.js";
 import "./editor.js";
 
-const VERSION = "1.0.0";
+const VERSION = "1.1.0";
 const UNAVAILABLE = new Set(["unavailable", "unknown", "none", ""]);
 const CHARGING_ON = new Set(["on", "true", "charging", "plugged_in", "plugged in", "connected"]);
 
@@ -124,6 +125,16 @@ class CarInfoCard extends LitElement {
     const charging = ids.find(
       (id) => /charg/i.test(id) && (id.startsWith("binary_sensor.") || id.startsWith("sensor."))
     );
+    const windowIds = ids.filter((id) => /window/i.test(id));
+    const usedWindows = new Set();
+    const windowConfig = {};
+    for (const definition of WINDOW_DEFS) {
+      const pattern = new RegExp(definition.id.replace("-", "[-_ ]"), "i");
+      const match = windowIds.find((id) => !usedWindows.has(id) && pattern.test(id));
+      if (!match) continue;
+      usedWindows.add(match);
+      windowConfig[definition.key] = match;
+    }
 
     return {
       title: "My Vehicle",
@@ -132,6 +143,7 @@ class CarInfoCard extends LitElement {
       ...(range ? { range_entity: range } : {}),
       ...(location ? { location_entity: location } : {}),
       ...(charging ? { charging_entity: charging } : {}),
+      ...windowConfig,
     };
   }
 
@@ -147,7 +159,18 @@ class CarInfoCard extends LitElement {
   }
 
   getCardSize() {
-    return 3;
+    return 6;
+  }
+
+  _windowModels() {
+    return WINDOW_DEFS.map((definition) => {
+      const resolved = this._resolve(this._config[definition.key]);
+      return {
+        ...definition,
+        ...resolved,
+        open: resolved.configured && isWindowOpen(resolved.stateObj),
+      };
+    });
   }
 
   _resolve(value) {
@@ -276,6 +299,7 @@ class CarInfoCard extends LitElement {
     const location = this._resolve(this._config.location_entity);
     const charging = this._resolve(this._config.charging_entity);
     const chargingNow = isCharging(charging.stateObj);
+    const windows = this._windowModels();
     const hasTile = battery.configured || range.configured || location.configured;
 
     return html`
@@ -287,6 +311,7 @@ class CarInfoCard extends LitElement {
           </div>
           ${charging.configured ? this._renderChargingIndicator(charging.stateObj) : nothing}
         </div>
+        ${renderCarPlan(windows, (entityIdToOpen) => this._openMoreInfo(entityIdToOpen))}
         ${hasTile
           ? html`
               <div class="grid-container">
@@ -311,7 +336,7 @@ if (!window.customCards.some((card) => card.type === "car-info-card")) {
     type: "car-info-card",
     name: "Car Info Card",
     preview: true,
-    description: "Displays battery or fuel level, range, location, and charging status for a vehicle.",
+    description: "Displays a vehicle plan, window status, battery or fuel level, range, location, and charging.",
     documentationURL: "https://github.com/davies1995/HA-Car-Card",
   });
 }

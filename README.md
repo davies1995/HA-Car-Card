@@ -1,11 +1,13 @@
 # Car Info Card
 
-A Home Assistant Lovelace card for vehicle telemetry. It shows battery or fuel level with a progress bar, remaining range, location, and whether the vehicle is charging.
+A Home Assistant Lovelace card for vehicle telemetry. It shows a top-down plan of the car, battery or fuel level with a progress bar, remaining range, location, and whether the vehicle is charging. Side windows turn red when their entity says they are down.
 
 The card is a single JavaScript module, registered as `car-info-card`, and can be installed with HACS or added as a dashboard resource.
 
 ## Features
 
+- Top-down plan of the vehicle, with the front at the top
+- Side windows highlighted red when they are open or down
 - Battery or fuel percentage with a progress bar that changes color as the level drops
 - Charging status with a charging icon and label
 - Remaining range, using the sensor's own unit
@@ -45,9 +47,15 @@ battery_entity: sensor.my_car_battery
 range_entity: sensor.my_car_range
 location_entity: device_tracker.my_car
 charging_entity: binary_sensor.my_car_charging
+front_left_window_entity: binary_sensor.my_car_front_left_window
+front_right_window_entity: binary_sensor.my_car_front_right_window
+rear_left_window_entity: binary_sensor.my_car_rear_left_window
+rear_right_window_entity: binary_sensor.my_car_rear_right_window
 ```
 
-Click a value to open the Home Assistant more-info dialog for that entity.
+Left and right are the vehicle's own left and right, with the front of the plan at the top of the card. On a right-hand-drive car, the front left window is the passenger side.
+
+A window is shown as down when its entity is `on`, `open`, `down`, or any number above 0. `off`, `closed`, `up`, and `0` stay the normal glass color. Click a window or a value to open the Home Assistant more-info dialog for that entity.
 
 ### Options
 
@@ -63,6 +71,10 @@ Click a value to open the Home Assistant more-info dialog for that entity.
 | `location_icon` | Optional icon. Defaults to `mdi:crosshairs-gps`. |
 | `charging_entity` | `binary_sensor` or `sensor`. `on`, `charging`, `plugged_in`, and `connected` count as charging. |
 | `charging_icon` | Optional icon used while charging. Defaults to `mdi:ev-station`. |
+| `front_left_window_entity` | Front left window. `binary_sensor`, `sensor`, or `cover`. Open states are drawn in red. |
+| `front_right_window_entity` | Front right window. |
+| `rear_left_window_entity` | Rear left window. |
+| `rear_right_window_entity` | Rear right window. |
 
 Charging is also detected when the charging entity has `attributes.charging: true`.
 

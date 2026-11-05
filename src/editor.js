@@ -31,6 +31,26 @@ const SCHEMA = [
     selector: { entity: { domain: ["binary_sensor", "sensor"] } },
   },
   { name: "charging_icon", label: "Charging icon", selector: { icon: {} } },
+  {
+    name: "front_left_window_entity",
+    label: "Front left window",
+    selector: { entity: { domain: ["binary_sensor", "sensor", "cover"] } },
+  },
+  {
+    name: "front_right_window_entity",
+    label: "Front right window",
+    selector: { entity: { domain: ["binary_sensor", "sensor", "cover"] } },
+  },
+  {
+    name: "rear_left_window_entity",
+    label: "Rear left window",
+    selector: { entity: { domain: ["binary_sensor", "sensor", "cover"] } },
+  },
+  {
+    name: "rear_right_window_entity",
+    label: "Rear right window",
+    selector: { entity: { domain: ["binary_sensor", "sensor", "cover"] } },
+  },
 ];
 
 const HELPERS = {
@@ -40,6 +60,11 @@ const HELPERS = {
   location_entity: "Device tracker, person, or location sensor. home and not_home are shown as Home and Away.",
   charging_entity: "On, charging, plugged in, or connected is treated as charging.",
   charging_icon: "Optional icon shown while the vehicle is charging.",
+  front_left_window_entity:
+    "Vehicle's front left, shown on the left of the plan. On, open, or a position above 0 turns that window red.",
+  front_right_window_entity: "Vehicle's front right. On, open, or a position above 0 turns that window red.",
+  rear_left_window_entity: "Vehicle's rear left. On, open, or a position above 0 turns that window red.",
+  rear_right_window_entity: "Vehicle's rear right. On, open, or a position above 0 turns that window red.",
 };
 
 export class CarInfoCardEditor extends LitElement {
