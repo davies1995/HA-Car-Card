@@ -1,8 +1,8 @@
 # Car Info Card
 
-A Home Assistant Lovelace card that shows a top-down plan of a vehicle. On the hatchback plan the doors swing open. On the VW ID.3 plan the doors, windows, boot, and headlights are highlighted in place. Windows turn red when they are down, and the boot is highlighted when it is open. The card also shows battery state of charge, mileage, and range, and can convert mileage and range between miles and kilometres.
+A Home Assistant Lovelace card that shows a top-down plan of a vehicle. On the hatchback plan the doors swing open. On the VW ID.3 and Tesla Model 3 plans the doors, windows, boot, and headlights are highlighted in place. Windows turn red when they are down, and the boot is highlighted when it is open. The card also shows battery state of charge, mileage, and range, and can convert mileage and range between miles and kilometres.
 
-Choose the plan in the card settings. Hatchback is the drawn plan. VW ID.3 uses the ID.3 line drawing, with doors, windows, the boot, and headlights highlighted in place.
+Choose the plan in the card settings. Hatchback is the drawn plan. VW ID.3 and Tesla Model 3 use those line drawings, with doors, windows, the boot, and headlights highlighted in place. The Model 3 charge port is on the left rear.
 
 ## Features
 
@@ -78,7 +78,7 @@ The charge connector is shown only while the cable entity is connected. It is gr
 | Option | Description |
 | --- | --- |
 | `title` | Card title. Defaults to `My Vehicle`. |
-| `car_model` | Plan to draw. `hatchback` or `vw-id3`. |
+| `car_model` | Plan to draw. `hatchback`, `vw-id3`, or `tesla-model-3`. |
 | `front_left_door_entity` | Front left door. Also `front_right`, `rear_left`, and `rear_right`. |
 | `front_left_window_entity` | Front left window. Also the other three side windows. |
 | `boot_entity` | Boot or tailgate. |

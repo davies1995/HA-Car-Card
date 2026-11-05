@@ -1,4 +1,5 @@
 import { renderHatchback } from "./hatchback.js";
+import { renderTeslaModel3 } from "./tesla-model-3.js";
 import { renderVwId3 } from "./vw-id3.js";
 
 const VEHICLES = {
@@ -11,6 +12,11 @@ const VEHICLES = {
     id: "vw-id3",
     label: "VW ID.3",
     render: renderVwId3,
+  },
+  "tesla-model-3": {
+    id: "tesla-model-3",
+    label: "Tesla Model 3",
+    render: renderTeslaModel3,
   },
 };
 
