@@ -14,14 +14,61 @@ export const styles = css`
   }
 
   .card-header {
+    position: relative;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    min-height: 40px;
     gap: 12px;
     font-size: 1.2rem;
     font-weight: 500;
     margin-bottom: 16px;
     color: var(--primary-text-color);
+  }
+
+  .card-header:has(.lock-badge) .header-title {
+    max-width: calc(50% - 24px);
+  }
+
+  .lock-badge {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    border-radius: 999px;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .lock-badge.unlocked {
+    color: var(--success-color, #43a047);
+  }
+
+  .lock-badge.locked {
+    color: var(--error-color, #e53935);
+  }
+
+  .lock-badge.unknown {
+    color: var(--secondary-text-color);
+  }
+
+  .lock-badge:focus-visible,
+  .charge-plug:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+  }
+
+  .glyph {
+    width: 28px;
+    height: 28px;
+    display: block;
+    fill: currentColor;
   }
 
   .header-title {
@@ -179,14 +226,63 @@ export const styles = css`
     gap: 8px;
   }
 
-  .plan svg {
+  .plan.on-white .plan-canvas {
+    background: #fff;
+    border-radius: 16px;
+  }
+
+  .plan-canvas {
+    position: relative;
+    display: inline-block;
+  }
+
+  .plan-canvas.has-plug {
+    padding-right: 34px;
+  }
+
+  .charge-plug {
+    position: absolute;
+    right: 2px;
+    z-index: 1;
+    display: inline-flex;
+    padding: 0;
+    border: none;
+    border-radius: 999px;
+    background: transparent;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+
+  .plan-canvas.vw-id3 .charge-plug {
+    top: 68%;
+  }
+
+  .plan-canvas.hatchback .charge-plug {
+    top: 66%;
+  }
+
+  .charge-plug.charging {
+    color: var(--success-color, #43a047);
+  }
+
+  .charge-plug.not-charging {
+    color: var(--error-color, #e53935);
+  }
+
+  .plan-canvas > svg {
     width: min(100%, 280px);
     height: auto;
     display: block;
   }
 
-  .plan svg.id3 {
+  .plan-canvas > svg.id3 {
     width: min(100%, 250px);
+  }
+
+  .charge-plug .glyph,
+  .lock-badge .glyph {
+    width: 28px;
+    height: 28px;
   }
 
   .plan-art {
