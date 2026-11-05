@@ -8,15 +8,19 @@ import {
   WINDOW_DEFS,
   convertDistance,
   formatDistance,
+  isCableConnected,
+  isCharging,
   isOpen,
+  lockStatus,
   normalizeUnit,
   unitFromState,
   unitLabel,
 } from "./vehicle-config.js";
 import { getVehicle } from "./vehicles/index.js";
+import { padlockIcon, type2Icon } from "./icons.js";
 import "./editor.js";
 
-const VERSION = "1.4.0";
+const VERSION = "1.5.0";
 const UNAVAILABLE = new Set(["unavailable", "unknown", "none", ""]);
 
 console.info(
@@ -96,11 +100,17 @@ class CarInfoCard extends LitElement {
     const range = find(/^sensor\..*range/i);
     const boot = find(/(boot|trunk|tailgate)/i);
     const headlights = find(/headlight|main_light|lights/i);
+    const cable = find(/charge.*(cable|plug|connect)|plug.*(connect|status)/i);
+    const charging = find(/charging/i);
+    const lock = find(/(^|[^a-z])lock/i);
     if (battery) config.battery_entity = battery;
     if (mileage) config.mileage_entity = mileage;
     if (range && range !== mileage) config.range_entity = range;
     if (boot) config.boot_entity = boot;
     if (headlights) config.headlights_entity = headlights;
+    if (cable) config.charge_cable_entity = cable;
+    if (charging && charging !== cable) config.charging_entity = charging;
+    if (lock) config.lock_entity = lock;
     for (const definition of [...DOOR_DEFS, ...WINDOW_DEFS]) {
       const pattern = new RegExp(definition.id.replace("-", "[-_ ]"), "i");
       const kind = definition.key.includes("door") ? "door" : "window";
@@ -232,13 +242,30 @@ class CarInfoCard extends LitElement {
     const windows = Object.fromEntries(WINDOW_DEFS.map((definition) => [definition.id, this._panel(definition)]));
     const boot = this._panel(BOOT_DEF);
     const headlights = this._panel(HEADLIGHT_DEF);
+    const cable = this._resolve(this._config.charge_cable_entity);
+    const cableConnected = cable.configured && isCableConnected(cable.stateObj);
+    const charging = this._resolve(this._config.charging_entity);
+    const chargingNow = charging.configured ? isCharging(charging.stateObj) : null;
+    const lock = this._resolve(this._config.lock_entity);
+    const locked = lock.configured ? lockStatus(lock.stateObj) : "";
     const alerts = [
       ...Object.values(doors).filter((door) => door.open).map((door) => `${door.short} door open`),
       ...Object.values(windows).filter((windowModel) => windowModel.open).map((windowModel) => `${windowModel.short} window down`),
       ...(boot.open ? ["Boot open"] : []),
       ...(headlights.open ? ["Headlights on"] : []),
     ];
-    const summary = alerts.length ? alerts.join(", ") : "Everything reported is closed";
+    const summaryParts = [...alerts];
+    if (locked === "locked") summaryParts.push("Locked");
+    if (locked === "unlocked") summaryParts.push("Unlocked");
+    if (cableConnected) {
+      summaryParts.push(
+        chargingNow === false ? "Charge cable connected, not charging" : chargingNow ? "Charging" : "Charge cable connected"
+      );
+    }
+    const summary = summaryParts.length ? summaryParts.join(", ") : "Everything reported is closed";
+    const plugLabel =
+      chargingNow === false ? "Charge cable connected, not charging" : chargingNow ? "Charge cable connected, charging" : "Charge cable connected";
+    const plugEntity = charging.stateObj ? charging.entityId : cable.entityId;
     const vehicle = getVehicle(this._config.car_model);
     const battery = this._resolve(this._config.battery_entity);
     const mileage = this._distance("mileage_entity", "mileage_unit");
@@ -251,18 +278,44 @@ class CarInfoCard extends LitElement {
           <div class="header-title">
             <span>${title}</span>
           </div>
+          ${lock.configured
+            ? html`
+                <button
+                  class="lock-badge ${locked || "unknown"}"
+                  type="button"
+                  aria-label=${locked === "unlocked" ? "Unlocked" : locked === "locked" ? "Locked" : "Lock unknown"}
+                  @click=${() => this._openMoreInfo(lock.entityId)}
+                >
+                  ${padlockIcon(locked === "unlocked")}
+                </button>
+              `
+            : nothing}
         </div>
-        <figure class="plan">
-          ${vehicle.render({
-            doors,
-            windows,
-            boot,
-            headlights,
-            summary,
-            onSelect: (entityId) => this._openMoreInfo(entityId),
-          })}
+        <figure class="plan ${this._config.white_background ? "on-white" : ""}">
+          <div class="plan-canvas ${vehicle.id}${cableConnected ? " has-plug" : ""}">
+            ${vehicle.render({
+              doors,
+              windows,
+              boot,
+              headlights,
+              summary,
+              onSelect: (entityId) => this._openMoreInfo(entityId),
+            })}
+            ${cableConnected
+              ? html`
+                  <button
+                    class="charge-plug ${chargingNow === false ? "not-charging" : "charging"}"
+                    type="button"
+                    aria-label=${plugLabel}
+                    @click=${() => this._openMoreInfo(plugEntity)}
+                  >
+                    ${type2Icon()}
+                  </button>
+                `
+              : nothing}
+          </div>
           <figcaption class=${alerts.length ? "plan-alert" : "plan-key"}>
-            ${alerts.length ? summary : "Front is at the top. Open windows turn red."}
+            ${alerts.length ? alerts.join(", ") : "Front is at the top. Open windows turn red."}
           </figcaption>
         </figure>
         ${this._renderBattery(battery)}
@@ -284,7 +337,8 @@ if (!window.customCards.some((card) => card.type === "car-info-card")) {
     type: "car-info-card",
     name: "Car Info Card",
     preview: true,
-    description: "Top-down vehicle plan, including a VW ID.3, with doors, windows, boot, headlights, battery, mileage, and range.",
+    description:
+      "Top-down vehicle plan, including a VW ID.3, with doors, windows, boot, headlights, charge cable, lock, battery, mileage, and range.",
     documentationURL: "https://github.com/davies1995/HA-Car-Card",
   });
 }
