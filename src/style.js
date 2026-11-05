@@ -1,0 +1,185 @@
+import { css } from "lit";
+
+export const styles = css`
+  :host {
+    display: block;
+  }
+
+  ha-card {
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    box-sizing: border-box;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 16px;
+    color: var(--primary-text-color);
+  }
+
+  .header-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .header-title span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .header-title ha-icon {
+    color: var(--primary-color);
+    --mdc-icon-size: 24px;
+  }
+
+  .charge-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex: 0 0 auto;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  .charge-indicator.charging {
+    color: var(--success-color, var(--green-color, #4caf50));
+  }
+
+  .charge-indicator.not-charging {
+    color: var(--disabled-text-color, var(--secondary-text-color));
+  }
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
+  }
+
+  .info-box {
+    background: var(--secondary-background-color, rgba(0, 0, 0, 0.05));
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+  }
+
+  button.info-box {
+    appearance: none;
+    border: none;
+    margin: 0;
+    width: 100%;
+    cursor: pointer;
+  }
+
+  button.info-box:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+  }
+
+  .info-box ha-icon {
+    color: var(--primary-color);
+    margin-bottom: 4px;
+    --mdc-icon-size: 22px;
+  }
+
+  .info-box ha-icon.low {
+    color: var(--error-color, var(--state-sensor-battery-low-color, #f44336));
+  }
+
+  .info-box ha-icon.medium {
+    color: var(--warning-color, var(--state-sensor-battery-medium-color, #ff9800));
+  }
+
+  .info-box ha-icon.charging {
+    color: var(--success-color, var(--green-color, #4caf50));
+  }
+
+  .label {
+    font-size: 0.8rem;
+    color: var(--secondary-text-color);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .value-container {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .value {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--primary-text-color);
+    overflow-wrap: anywhere;
+  }
+
+  .value.location {
+    font-size: 1rem;
+  }
+
+  .unit {
+    font-size: 0.85rem;
+    color: var(--secondary-text-color);
+  }
+
+  .progress-bar {
+    width: 100%;
+    height: 6px;
+    background-color: var(--divider-color, #e0e0e0);
+    border-radius: 3px;
+    margin-top: 6px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background-color: var(--primary-color);
+    border-radius: 3px;
+    transition: width 0.3s ease-in-out;
+  }
+
+  .progress-fill.low {
+    background-color: var(--error-color, var(--state-sensor-battery-low-color, #f44336));
+  }
+
+  .progress-fill.medium {
+    background-color: var(--warning-color, var(--state-sensor-battery-medium-color, #ff9800));
+  }
+
+  .progress-fill.high {
+    background-color: var(--primary-color);
+  }
+
+  .progress-fill.charging {
+    background-color: var(--success-color, var(--state-sensor-battery-high-color, #4caf50));
+  }
+
+  .empty {
+    color: var(--secondary-text-color);
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .progress-fill {
+      transition: none;
+    }
+  }
+`;
