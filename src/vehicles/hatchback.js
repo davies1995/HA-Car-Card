@@ -77,7 +77,7 @@ function doorGroup(id, doors, windows, onSelect) {
   `;
 }
 
-export function renderHatchback({ doors, windows, boot, summary, onSelect }) {
+export function renderHatchback({ doors, windows, boot, headlights, summary, onSelect }) {
   const bootShift = boot.open ? "translate(0 22)" : "translate(0 0)";
   return svg`
     <svg viewBox="0 0 320 540" role="img" aria-label="Top view of the hatchback, front at the top. ${summary}">
@@ -100,8 +100,8 @@ export function renderHatchback({ doors, windows, boot, summary, onSelect }) {
 
       <path class="hood" d="M138 72h44l8 34h-60z"></path>
       <ellipse class="badge" cx="160" cy="88" rx="7" ry="7"></ellipse>
-      <path class="headlight" d="M118 70h16l4 14h-24z"></path>
-      <path class="headlight" d="M202 70h-16l-4 14h24z"></path>
+      ${shape(headlights, "headlight", "114,68 136,68 140,86 110,86", "on", onSelect)}
+      ${shape(headlights, "headlight", "206,68 184,68 180,86 210,86", "on", onSelect)}
       <path class="glass" d="M126 118h68l8 42h-84z"></path>
       <path class="roof" d="M146 176h28v156h-28z"></path>
 

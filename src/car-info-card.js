@@ -3,6 +3,7 @@ import { styleMap } from "lit/directives/style-map.js";
 import { styles } from "./style.js";
 import {
   BOOT_DEF,
+  HEADLIGHT_DEF,
   DOOR_DEFS,
   WINDOW_DEFS,
   convertDistance,
@@ -15,7 +16,7 @@ import {
 import { getVehicle } from "./vehicles/index.js";
 import "./editor.js";
 
-const VERSION = "1.2.0";
+const VERSION = "1.3.0";
 const UNAVAILABLE = new Set(["unavailable", "unknown", "none", ""]);
 
 console.info(
@@ -94,10 +95,12 @@ class CarInfoCard extends LitElement {
     const mileage = find(/^sensor\..*(odometer|mileage|total_distance)/i);
     const range = find(/^sensor\..*range/i);
     const boot = find(/(boot|trunk|tailgate)/i);
+    const headlights = find(/headlight|main_light|lights/i);
     if (battery) config.battery_entity = battery;
     if (mileage) config.mileage_entity = mileage;
     if (range && range !== mileage) config.range_entity = range;
     if (boot) config.boot_entity = boot;
+    if (headlights) config.headlights_entity = headlights;
     for (const definition of [...DOOR_DEFS, ...WINDOW_DEFS]) {
       const pattern = new RegExp(definition.id.replace("-", "[-_ ]"), "i");
       const kind = definition.key.includes("door") ? "door" : "window";
@@ -228,10 +231,12 @@ class CarInfoCard extends LitElement {
     const doors = Object.fromEntries(DOOR_DEFS.map((definition) => [definition.id, this._panel(definition)]));
     const windows = Object.fromEntries(WINDOW_DEFS.map((definition) => [definition.id, this._panel(definition)]));
     const boot = this._panel(BOOT_DEF);
+    const headlights = this._panel(HEADLIGHT_DEF);
     const alerts = [
       ...Object.values(doors).filter((door) => door.open).map((door) => `${door.short} door open`),
       ...Object.values(windows).filter((windowModel) => windowModel.open).map((windowModel) => `${windowModel.short} window down`),
       ...(boot.open ? ["Boot open"] : []),
+      ...(headlights.open ? ["Headlights on"] : []),
     ];
     const summary = alerts.length ? alerts.join(", ") : "Everything reported is closed";
     const vehicle = getVehicle(this._config.car_model);
@@ -248,7 +253,14 @@ class CarInfoCard extends LitElement {
           </div>
         </div>
         <figure class="plan">
-          ${vehicle.render({ doors, windows, boot, summary, onSelect: (entityId) => this._openMoreInfo(entityId) })}
+          ${vehicle.render({
+            doors,
+            windows,
+            boot,
+            headlights,
+            summary,
+            onSelect: (entityId) => this._openMoreInfo(entityId),
+          })}
           <figcaption class=${alerts.length ? "plan-alert" : "plan-key"}>
             ${alerts.length ? summary : "Front is at the top. Open windows turn red."}
           </figcaption>

@@ -1,5 +1,5 @@
 import { LitElement, html, css } from "lit";
-import { DOOR_DEFS, WINDOW_DEFS, BOOT_DEF, VEHICLE_OPTIONS, UNIT_OPTIONS } from "./vehicle-config.js";
+import { DOOR_DEFS, WINDOW_DEFS, BOOT_DEF, HEADLIGHT_DEF, VEHICLE_OPTIONS, UNIT_OPTIONS } from "./vehicle-config.js";
 
 const OPEN_DOMAINS = ["binary_sensor", "sensor", "cover"];
 
@@ -73,6 +73,9 @@ const SCHEMA = [
   ),
   section("Boot", [
     entityField(BOOT_DEF.key, BOOT_DEF.label, "On or open highlights the boot and shows it ajar."),
+  ]),
+  section("Headlights", [
+    entityField(HEADLIGHT_DEF.key, HEADLIGHT_DEF.label, "On turns both headlights pale yellow."),
   ]),
   section("Battery", [
     {
