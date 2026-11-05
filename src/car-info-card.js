@@ -1,12 +1,22 @@
 import { LitElement, html, nothing } from "lit";
 import { styleMap } from "lit/directives/style-map.js";
 import { styles } from "./style.js";
-import { WINDOW_DEFS, isWindowOpen, renderCarPlan } from "./car-plan.js";
+import {
+  BOOT_DEF,
+  DOOR_DEFS,
+  WINDOW_DEFS,
+  convertDistance,
+  formatDistance,
+  isOpen,
+  normalizeUnit,
+  unitFromState,
+  unitLabel,
+} from "./vehicle-config.js";
+import { getVehicle } from "./vehicles/index.js";
 import "./editor.js";
 
-const VERSION = "1.1.0";
+const VERSION = "1.2.0";
 const UNAVAILABLE = new Set(["unavailable", "unknown", "none", ""]);
-const CHARGING_ON = new Set(["on", "true", "charging", "plugged_in", "plugged in", "connected"]);
 
 console.info(
   `%c CAR-INFO-CARD %c ${VERSION} `,
@@ -28,76 +38,30 @@ function numericState(stateObj) {
   return Number.isFinite(value) ? value : null;
 }
 
-function isPercentLevel(stateObj, value) {
-  if (!Number.isFinite(value)) return false;
-  const unit = String(stateObj?.attributes?.unit_of_measurement ?? "").trim().toLowerCase();
-  if (unit === "%" || unit === "percent") return true;
-  return unit === "" && value >= 0 && value <= 100;
-}
-
-function levelTone(percent, charging) {
-  if (charging) return "charging";
-  if (percent <= 15) return "low";
-  if (percent <= 30) return "medium";
-  return "high";
-}
-
-function batteryIcon(level, charging) {
-  if (!Number.isFinite(level)) {
-    return charging ? "mdi:battery-charging" : "mdi:battery";
-  }
-  if (level <= 5) {
-    return charging ? "mdi:battery-charging-outline" : "mdi:battery-outline";
-  }
-  if (level >= 95) {
-    return charging ? "mdi:battery-charging-100" : "mdi:battery";
-  }
-  const step = Math.max(10, Math.round(level / 10) * 10);
-  return charging ? `mdi:battery-charging-${step}` : `mdi:battery-${step}`;
-}
-
-function isCharging(stateObj) {
-  if (isUnavailable(stateObj)) return false;
-  const state = String(stateObj.state).trim().toLowerCase();
-  if (CHARGING_ON.has(state)) return true;
-  return stateObj.attributes?.charging === true;
-}
-
-function formatToken(value) {
-  return String(value)
-    .replace(/[_-]+/g, " ")
-    .trim()
-    .replace(/\b\w/g, (letter) => letter.toUpperCase());
-}
-
-function chargingLabel(stateObj) {
-  if (!stateObj) return "Not found";
-  const state = String(stateObj.state).trim().toLowerCase();
-  if (state === "unavailable") return "Unavailable";
-  if (state === "unknown" || state === "none" || state === "") return "Unknown";
-  if (isCharging(stateObj)) return "Charging";
-  if (["off", "false", "not_charging", "not charging", "disconnected", "unplugged", "idle"].includes(state)) {
-    return "Not charging";
-  }
-  return formatToken(stateObj.state);
-}
-
-function formatLocation(stateObj) {
-  if (!stateObj) return "Not found";
-  const state = String(stateObj.state).trim().toLowerCase();
-  if (state === "home") return "Home";
-  if (state === "not_home" || state === "not home") return "Away";
-  if (state === "unavailable") return "Unavailable";
-  if (state === "unknown" || state === "none" || state === "") return "Unknown";
-  return formatToken(stateObj.state);
-}
-
 function displayValue(stateObj) {
   if (!stateObj) return "Not found";
   const state = String(stateObj.state).trim().toLowerCase();
   if (state === "unavailable") return "Unavailable";
   if (state === "unknown" || state === "none" || state === "") return "Unknown";
   return stateObj.state;
+}
+
+function batteryIcon(level) {
+  if (!Number.isFinite(level)) return "mdi:battery-unknown";
+  if (level <= 5) return "mdi:battery-outline";
+  if (level >= 95) return "mdi:battery";
+  const step = Math.max(10, Math.round(level / 10) * 10);
+  return `mdi:battery-${step}`;
+}
+
+function levelTone(percent) {
+  if (percent <= 15) return "low";
+  if (percent <= 30) return "medium";
+  return "high";
+}
+
+function sourceUnit(setting, stateObj, displayUnit) {
+  return normalizeUnit(setting) || unitFromState(stateObj) || normalizeUnit(displayUnit) || "mi";
 }
 
 class CarInfoCard extends LitElement {
@@ -117,34 +81,30 @@ class CarInfoCard extends LitElement {
   }
 
   static getStubConfig(hass) {
-    const states = hass?.states ?? {};
-    const ids = Object.keys(states);
-    const battery = ids.find((id) => id.startsWith("sensor.") && /battery|fuel|soc/i.test(id));
-    const range = ids.find((id) => id.startsWith("sensor.") && /range/i.test(id) && id !== battery);
-    const location = ids.find((id) => id.startsWith("device_tracker.") || id.startsWith("person."));
-    const charging = ids.find(
-      (id) => /charg/i.test(id) && (id.startsWith("binary_sensor.") || id.startsWith("sensor."))
-    );
-    const windowIds = ids.filter((id) => /window/i.test(id));
-    const usedWindows = new Set();
-    const windowConfig = {};
-    for (const definition of WINDOW_DEFS) {
-      const pattern = new RegExp(definition.id.replace("-", "[-_ ]"), "i");
-      const match = windowIds.find((id) => !usedWindows.has(id) && pattern.test(id));
-      if (!match) continue;
-      usedWindows.add(match);
-      windowConfig[definition.key] = match;
-    }
-
-    return {
+    const ids = Object.keys(hass?.states ?? {});
+    const find = (pattern) => ids.find((id) => pattern.test(id));
+    const config = {
       title: "My Vehicle",
-      car_icon: "mdi:car",
-      ...(battery ? { battery_entity: battery } : {}),
-      ...(range ? { range_entity: range } : {}),
-      ...(location ? { location_entity: location } : {}),
-      ...(charging ? { charging_entity: charging } : {}),
-      ...windowConfig,
+      car_model: "hatchback",
+      mileage_unit: "mi",
+      range_unit: "mi",
+      display_unit: "mi",
     };
+    const battery = find(/^sensor\..*(battery|soc)/i);
+    const mileage = find(/^sensor\..*(odometer|mileage|total_distance)/i);
+    const range = find(/^sensor\..*range/i);
+    const boot = find(/(boot|trunk|tailgate)/i);
+    if (battery) config.battery_entity = battery;
+    if (mileage) config.mileage_entity = mileage;
+    if (range && range !== mileage) config.range_entity = range;
+    if (boot) config.boot_entity = boot;
+    for (const definition of [...DOOR_DEFS, ...WINDOW_DEFS]) {
+      const pattern = new RegExp(definition.id.replace("-", "[-_ ]"), "i");
+      const kind = definition.key.includes("door") ? "door" : "window";
+      const match = ids.find((id) => pattern.test(id) && new RegExp(kind, "i").test(id));
+      if (match) config[definition.key] = match;
+    }
+    return config;
   }
 
   setConfig(config) {
@@ -153,35 +113,34 @@ class CarInfoCard extends LitElement {
     }
     this._config = {
       title: "My Vehicle",
-      car_icon: "mdi:car",
+      car_model: "hatchback",
+      mileage_unit: "mi",
+      range_unit: "mi",
+      display_unit: "mi",
       ...config,
     };
   }
 
   getCardSize() {
-    return 6;
-  }
-
-  _windowModels() {
-    return WINDOW_DEFS.map((definition) => {
-      const resolved = this._resolve(this._config[definition.key]);
-      return {
-        ...definition,
-        ...resolved,
-        open: resolved.configured && isWindowOpen(resolved.stateObj),
-      };
-    });
+    return 7;
   }
 
   _resolve(value) {
     const id = cleanText(value);
-    if (!id) {
-      return { configured: false, entityId: "", stateObj: null };
-    }
+    if (!id) return { configured: false, entityId: "", stateObj: null };
     return {
       configured: true,
       entityId: id,
       stateObj: this.hass?.states?.[id] ?? null,
+    };
+  }
+
+  _panel(definition) {
+    const resolved = this._resolve(this._config[definition.key]);
+    return {
+      ...definition,
+      ...resolved,
+      open: resolved.configured && isOpen(resolved.stateObj),
     };
   }
 
@@ -195,49 +154,48 @@ class CarInfoCard extends LitElement {
     this.dispatchEvent(event);
   }
 
-  _renderChargingIndicator(stateObj) {
-    const charging = isCharging(stateObj);
-    const label = chargingLabel(stateObj);
-    const icon = charging ? cleanText(this._config.charging_icon) || "mdi:ev-station" : "mdi:power-plug-off";
-    return html`
-      <span class="charge-indicator ${charging ? "charging" : "not-charging"}" title=${label} role="img" aria-label=${label}>
-        <ha-icon .icon=${icon}></ha-icon>
-        <span>${label}</span>
-      </span>
-    `;
+  _distance(entityKey, unitKey) {
+    const resolved = this._resolve(this._config[entityKey]);
+    const displayUnit = normalizeUnit(this._config.display_unit) || "mi";
+    if (!resolved.configured) return { ...resolved, text: "", unit: unitLabel(displayUnit) };
+    const numeric = numericState(resolved.stateObj);
+    if (numeric == null) {
+      return { ...resolved, text: displayValue(resolved.stateObj), unit: "" };
+    }
+    const fromUnit = sourceUnit(this._config[unitKey], resolved.stateObj, displayUnit);
+    const converted = convertDistance(numeric, fromUnit, displayUnit);
+    return { ...resolved, text: formatDistance(converted), unit: unitLabel(displayUnit) };
   }
 
-  _renderBox(resolved, content) {
-    if (!resolved.configured) return nothing;
-    if (!resolved.stateObj) {
-      return html`<div class="info-box">${content}</div>`;
-    }
+  _renderDistance(label, reading) {
+    if (!reading.configured) return nothing;
+    const content = html`
+      <span class="label">${label}</span>
+      <div class="value-container">
+        <span class="value">${reading.text}</span>
+        ${reading.unit ? html`<span class="unit">${reading.unit}</span>` : nothing}
+      </div>
+    `;
+    if (!reading.stateObj) return html`<div class="info-box">${content}</div>`;
     return html`
-      <button class="info-box" type="button" @click=${() => this._openMoreInfo(resolved.entityId)}>
+      <button class="info-box" type="button" @click=${() => this._openMoreInfo(reading.entityId)}>
         ${content}
       </button>
     `;
   }
 
-  _renderBattery(resolved, charging) {
-    const iconOverride = cleanText(this._config.battery_icon);
-    const level = numericState(resolved.stateObj);
-    const showBar = isPercentLevel(resolved.stateObj, level);
-    const percent = showBar ? Math.min(100, Math.max(0, level)) : null;
-    const tone = percent == null ? "" : levelTone(percent, charging);
-    const icon = iconOverride || batteryIcon(level, charging);
-    const unit = showBar
-      ? resolved.stateObj?.attributes?.unit_of_measurement || "%"
-      : resolved.stateObj?.attributes?.unit_of_measurement || "";
-
-    return this._renderBox(
-      resolved,
-      html`
-        <ha-icon class=${tone} .icon=${icon}></ha-icon>
-        <span class="label">Battery / Fuel</span>
+  _renderBattery(battery) {
+    if (!battery.configured) return nothing;
+    const level = numericState(battery.stateObj);
+    const percent = level == null ? null : Math.min(100, Math.max(0, level));
+    const tone = percent == null ? "" : levelTone(percent);
+    const content = html`
+      <ha-icon class=${tone} .icon=${batteryIcon(level)}></ha-icon>
+      <div class="battery-copy">
+        <span class="label">Battery</span>
         <div class="value-container">
-          <span class="value">${displayValue(resolved.stateObj)}</span>
-          ${unit && !isUnavailable(resolved.stateObj) ? html`<span class="unit">${unit}</span>` : nothing}
+          <span class="value">${percent == null ? displayValue(battery.stateObj) : formatDistance(percent)}</span>
+          ${percent == null ? nothing : html`<span class="unit">%</span>`}
         </div>
         ${percent == null
           ? nothing
@@ -248,79 +206,57 @@ class CarInfoCard extends LitElement {
                 aria-valuemin="0"
                 aria-valuemax="100"
                 aria-valuenow=${percent}
-                aria-label="Battery or fuel level"
+                aria-label="Battery state of charge"
               >
                 <div class="progress-fill ${tone}" style=${styleMap({ width: `${percent}%` })}></div>
               </div>
             `}
-      `
-    );
-  }
-
-  _renderRange(resolved) {
-    const icon = cleanText(this._config.range_icon) || "mdi:map-marker-distance";
-    const unit = isUnavailable(resolved.stateObj) ? "" : resolved.stateObj?.attributes?.unit_of_measurement || "";
-    return this._renderBox(
-      resolved,
-      html`
-        <ha-icon .icon=${icon}></ha-icon>
-        <span class="label">Range</span>
-        <div class="value-container">
-          <span class="value">${displayValue(resolved.stateObj)}</span>
-          ${unit ? html`<span class="unit">${unit}</span>` : nothing}
-        </div>
-      `
-    );
-  }
-
-  _renderLocation(resolved) {
-    const icon = cleanText(this._config.location_icon) || "mdi:crosshairs-gps";
-    return this._renderBox(
-      resolved,
-      html`
-        <ha-icon .icon=${icon}></ha-icon>
-        <span class="label">Location</span>
-        <div class="value-container">
-          <span class="value location">${formatLocation(resolved.stateObj)}</span>
-        </div>
-      `
-    );
+      </div>
+    `;
+    if (!battery.stateObj) return html`<div class="battery">${content}</div>`;
+    return html`
+      <button class="battery" type="button" @click=${() => this._openMoreInfo(battery.entityId)}>
+        ${content}
+      </button>
+    `;
   }
 
   render() {
-    if (!this.hass || !this._config) {
-      return html``;
-    }
+    if (!this.hass || !this._config) return html``;
 
     const title = cleanText(this._config.title) || "My Vehicle";
-    const icon = cleanText(this._config.car_icon) || "mdi:car";
+    const doors = Object.fromEntries(DOOR_DEFS.map((definition) => [definition.id, this._panel(definition)]));
+    const windows = Object.fromEntries(WINDOW_DEFS.map((definition) => [definition.id, this._panel(definition)]));
+    const boot = this._panel(BOOT_DEF);
+    const alerts = [
+      ...Object.values(doors).filter((door) => door.open).map((door) => `${door.short} door open`),
+      ...Object.values(windows).filter((windowModel) => windowModel.open).map((windowModel) => `${windowModel.short} window down`),
+      ...(boot.open ? ["Boot open"] : []),
+    ];
+    const summary = alerts.length ? alerts.join(", ") : "Everything reported is closed";
+    const vehicle = getVehicle(this._config.car_model);
     const battery = this._resolve(this._config.battery_entity);
-    const range = this._resolve(this._config.range_entity);
-    const location = this._resolve(this._config.location_entity);
-    const charging = this._resolve(this._config.charging_entity);
-    const chargingNow = isCharging(charging.stateObj);
-    const windows = this._windowModels();
-    const hasTile = battery.configured || range.configured || location.configured;
+    const mileage = this._distance("mileage_entity", "mileage_unit");
+    const range = this._distance("range_entity", "range_unit");
+    const hasDistance = mileage.configured || range.configured;
 
     return html`
       <ha-card>
         <div class="card-header">
           <div class="header-title">
-            <ha-icon .icon=${icon}></ha-icon>
             <span>${title}</span>
           </div>
-          ${charging.configured ? this._renderChargingIndicator(charging.stateObj) : nothing}
         </div>
-        ${renderCarPlan(windows, (entityIdToOpen) => this._openMoreInfo(entityIdToOpen))}
-        ${hasTile
-          ? html`
-              <div class="grid-container">
-                ${this._renderBattery(battery, chargingNow)}
-                ${this._renderRange(range)}
-                ${this._renderLocation(location)}
-              </div>
-            `
-          : html`<div class="empty">Choose a battery, range, or location entity in the card options.</div>`}
+        <figure class="plan">
+          ${vehicle.render({ doors, windows, boot, summary, onSelect: (entityId) => this._openMoreInfo(entityId) })}
+          <figcaption class=${alerts.length ? "plan-alert" : "plan-key"}>
+            ${alerts.length ? summary : "Front is at the top. Open windows turn red."}
+          </figcaption>
+        </figure>
+        ${this._renderBattery(battery)}
+        ${hasDistance
+          ? html`<div class="grid-container">${this._renderDistance("Mileage", mileage)}${this._renderDistance("Range", range)}</div>`
+          : nothing}
       </ha-card>
     `;
   }
@@ -336,7 +272,7 @@ if (!window.customCards.some((card) => card.type === "car-info-card")) {
     type: "car-info-card",
     name: "Car Info Card",
     preview: true,
-    description: "Displays a vehicle plan, window status, battery or fuel level, range, location, and charging.",
+    description: "Top-down vehicle plan with doors, windows, boot, battery, mileage, and range.",
     documentationURL: "https://github.com/davies1995/HA-Car-Card",
   });
 }

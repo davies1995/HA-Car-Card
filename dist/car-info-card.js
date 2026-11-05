@@ -1,4 +1,4 @@
-const t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,i=Symbol(),n=new WeakMap;let r=class{constructor(t,e,n){if(this._$cssResult$=!0,n!==i)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=t,this.t=e}get styleSheet(){let t=this.o;const i=this.t;if(e&&void 0===t){const e=void 0!==i&&1===i.length;e&&(t=n.get(i)),void 0===t&&((this.o=t=new CSSStyleSheet).replaceSync(this.cssText),e&&n.set(i,t))}return t}toString(){return this.cssText}};const s=(t,...e)=>{const n=1===t.length?t[0]:e.reduce((e,i,n)=>e+(t=>{if(!0===t._$cssResult$)return t.cssText;if("number"==typeof t)return t;throw Error("Value passed to 'css' function must be a 'css' function result: "+t+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(i)+t[n+1],t[0]);return new r(n,t,i)},o=e?t=>t:t=>t instanceof CSSStyleSheet?(t=>{let e="";for(const i of t.cssRules)e+=i.cssText;return(t=>new r("string"==typeof t?t:t+"",void 0,i))(e)})(t):t,{is:a,defineProperty:l,getOwnPropertyDescriptor:c,getOwnPropertyNames:h,getOwnPropertySymbols:d,getPrototypeOf:p}=Object,u=globalThis,f=u.trustedTypes,g=f?f.emptyScript:"",_=u.reactiveElementPolyfillSupport,m=(t,e)=>t,y={toAttribute(t,e){switch(e){case Boolean:t=t?g:null;break;case Object:case Array:t=null==t?t:JSON.stringify(t)}return t},fromAttribute(t,e){let i=t;switch(e){case Boolean:i=null!==t;break;case Number:i=null===t?null:Number(t);break;case Object:case Array:try{i=JSON.parse(t)}catch(t){i=null}}return i}},$=(t,e)=>!a(t,e),b={attribute:!0,type:String,converter:y,reflect:!1,useDefault:!1,hasChanged:$};Symbol.metadata??=Symbol("metadata"),u.litPropertyMetadata??=new WeakMap;let w=class extends HTMLElement{static addInitializer(t){this._$Ei(),(this.l??=[]).push(t)}static get observedAttributes(){return this.finalize(),this._$Eh&&[...this._$Eh.keys()]}static createProperty(t,e=b){if(e.state&&(e.attribute=!1),this._$Ei(),this.prototype.hasOwnProperty(t)&&((e=Object.create(e)).wrapped=!0),this.elementProperties.set(t,e),!e.noAccessor){const i=Symbol(),n=this.getPropertyDescriptor(t,i,e);void 0!==n&&l(this.prototype,t,n)}}static getPropertyDescriptor(t,e,i){const{get:n,set:r}=c(this.prototype,t)??{get(){return this[e]},set(t){this[e]=t}};return{get:n,set(e){const s=n?.call(this);r?.call(this,e),this.requestUpdate(t,s,i)},configurable:!0,enumerable:!0}}static getPropertyOptions(t){return this.elementProperties.get(t)??b}static _$Ei(){if(this.hasOwnProperty(m("elementProperties")))return;const t=p(this);t.finalize(),void 0!==t.l&&(this.l=[...t.l]),this.elementProperties=new Map(t.elementProperties)}static finalize(){if(this.hasOwnProperty(m("finalized")))return;if(this.finalized=!0,this._$Ei(),this.hasOwnProperty(m("properties"))){const t=this.properties,e=[...h(t),...d(t)];for(const i of e)this.createProperty(i,t[i])}const t=this[Symbol.metadata];if(null!==t){const e=litPropertyMetadata.get(t);if(void 0!==e)for(const[t,i]of e)this.elementProperties.set(t,i)}this._$Eh=new Map;for(const[t,e]of this.elementProperties){const i=this._$Eu(t,e);void 0!==i&&this._$Eh.set(i,t)}this.elementStyles=this.finalizeStyles(this.styles)}static finalizeStyles(t){const e=[];if(Array.isArray(t)){const i=new Set(t.flat(1/0).reverse());for(const t of i)e.unshift(o(t))}else void 0!==t&&e.push(o(t));return e}static _$Eu(t,e){const i=e.attribute;return!1===i?void 0:"string"==typeof i?i:"string"==typeof t?t.toLowerCase():void 0}constructor(){super(),this._$Ep=void 0,this.isUpdatePending=!1,this.hasUpdated=!1,this._$Em=null,this._$Ev()}_$Ev(){this._$ES=new Promise(t=>this.enableUpdating=t),this._$AL=new Map,this._$E_(),this.requestUpdate(),this.constructor.l?.forEach(t=>t(this))}addController(t){(this._$EO??=new Set).add(t),void 0!==this.renderRoot&&this.isConnected&&t.hostConnected?.()}removeController(t){this._$EO?.delete(t)}_$E_(){const t=new Map,e=this.constructor.elementProperties;for(const i of e.keys())this.hasOwnProperty(i)&&(t.set(i,this[i]),delete this[i]);t.size>0&&(this._$Ep=t)}createRenderRoot(){const i=this.shadowRoot??this.attachShadow(this.constructor.shadowRootOptions);return((i,n)=>{if(e)i.adoptedStyleSheets=n.map(t=>t instanceof CSSStyleSheet?t:t.styleSheet);else for(const e of n){const n=document.createElement("style"),r=t.litNonce;void 0!==r&&n.setAttribute("nonce",r),n.textContent=e.cssText,i.appendChild(n)}})(i,this.constructor.elementStyles),i}connectedCallback(){this.renderRoot??=this.createRenderRoot(),this.enableUpdating(!0),this._$EO?.forEach(t=>t.hostConnected?.())}enableUpdating(t){}disconnectedCallback(){this._$EO?.forEach(t=>t.hostDisconnected?.())}attributeChangedCallback(t,e,i){this._$AK(t,i)}_$ET(t,e){const i=this.constructor.elementProperties.get(t),n=this.constructor._$Eu(t,i);if(void 0!==n&&!0===i.reflect){const r=(void 0!==i.converter?.toAttribute?i.converter:y).toAttribute(e,i.type);this._$Em=t,null==r?this.removeAttribute(n):this.setAttribute(n,r),this._$Em=null}}_$AK(t,e){const i=this.constructor,n=i._$Eh.get(t);if(void 0!==n&&this._$Em!==n){const t=i.getPropertyOptions(n),r="function"==typeof t.converter?{fromAttribute:t.converter}:void 0!==t.converter?.fromAttribute?t.converter:y;this._$Em=n;const s=r.fromAttribute(e,t.type);this[n]=s??this._$Ej?.get(n)??s,this._$Em=null}}requestUpdate(t,e,i,n=!1,r){if(void 0!==t){const s=this.constructor;if(!1===n&&(r=this[t]),i??=s.getPropertyOptions(t),!((i.hasChanged??$)(r,e)||i.useDefault&&i.reflect&&r===this._$Ej?.get(t)&&!this.hasAttribute(s._$Eu(t,i))))return;this.C(t,e,i)}!1===this.isUpdatePending&&(this._$ES=this._$EP())}C(t,e,{useDefault:i,reflect:n,wrapped:r},s){i&&!(this._$Ej??=new Map).has(t)&&(this._$Ej.set(t,s??e??this[t]),!0!==r||void 0!==s)||(this._$AL.has(t)||(this.hasUpdated||i||(e=void 0),this._$AL.set(t,e)),!0===n&&this._$Em!==t&&(this._$Eq??=new Set).add(t))}async _$EP(){this.isUpdatePending=!0;try{await this._$ES}catch(t){Promise.reject(t)}const t=this.scheduleUpdate();return null!=t&&await t,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){if(!this.isUpdatePending)return;if(!this.hasUpdated){if(this.renderRoot??=this.createRenderRoot(),this._$Ep){for(const[t,e]of this._$Ep)this[t]=e;this._$Ep=void 0}const t=this.constructor.elementProperties;if(t.size>0)for(const[e,i]of t){const{wrapped:t}=i,n=this[e];!0!==t||this._$AL.has(e)||void 0===n||this.C(e,void 0,i,n)}}let t=!1;const e=this._$AL;try{t=this.shouldUpdate(e),t?(this.willUpdate(e),this._$EO?.forEach(t=>t.hostUpdate?.()),this.update(e)):this._$EM()}catch(e){throw t=!1,this._$EM(),e}t&&this._$AE(e)}willUpdate(t){}_$AE(t){this._$EO?.forEach(t=>t.hostUpdated?.()),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(t)),this.updated(t)}_$EM(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$ES}shouldUpdate(t){return!0}update(t){this._$Eq&&=this._$Eq.forEach(t=>this._$ET(t,this[t])),this._$EM()}updated(t){}firstUpdated(t){}};w.elementStyles=[],w.shadowRootOptions={mode:"open"},w[m("elementProperties")]=new Map,w[m("finalized")]=new Map,_?.({ReactiveElement:w}),(u.reactiveElementVersions??=[]).push("2.1.2");const v=globalThis,A=t=>t,x=v.trustedTypes,E=x?x.createPolicy("lit-html",{createHTML:t=>t}):void 0,S="$lit$",C=`lit$${Math.random().toFixed(9).slice(2)}$`,k="?"+C,O=`<${k}>`,M=document,P=()=>M.createComment(""),U=t=>null===t||"object"!=typeof t&&"function"!=typeof t,H=Array.isArray,j="[ \t\n\f\r]",N=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,R=/-->/g,z=/>/g,T=RegExp(`>|${j}(?:([^\\s"'>=/]+)(${j}*=${j}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`,"g"),L=/'/g,I=/"/g,B=/^(?:script|style|textarea|title)$/i,D=t=>(e,...i)=>({_$litType$:t,strings:e,values:i}),W=D(1),V=D(2),F=Symbol.for("lit-noChange"),q=Symbol.for("lit-nothing"),J=new WeakMap,Z=M.createTreeWalker(M,129);function K(t,e){if(!H(t)||!t.hasOwnProperty("raw"))throw Error("invalid template strings array");return void 0!==E?E.createHTML(e):e}const G=(t,e)=>{const i=t.length-1,n=[];let r,s=2===e?"<svg>":3===e?"<math>":"",o=N;for(let e=0;e<i;e++){const i=t[e];let a,l,c=-1,h=0;for(;h<i.length&&(o.lastIndex=h,l=o.exec(i),null!==l);)h=o.lastIndex,o===N?"!--"===l[1]?o=R:void 0!==l[1]?o=z:void 0!==l[2]?(B.test(l[2])&&(r=RegExp("</"+l[2],"g")),o=T):void 0!==l[3]&&(o=T):o===T?">"===l[0]?(o=r??N,c=-1):void 0===l[1]?c=-2:(c=o.lastIndex-l[2].length,a=l[1],o=void 0===l[3]?T:'"'===l[3]?I:L):o===I||o===L?o=T:o===R||o===z?o=N:(o=T,r=void 0);const d=o===T&&t[e+1].startsWith("/>")?" ":"";s+=o===N?i+O:c>=0?(n.push(a),i.slice(0,c)+S+i.slice(c)+C+d):i+C+(-2===c?e:d)}return[K(t,s+(t[i]||"<?>")+(2===e?"</svg>":3===e?"</math>":"")),n]};class Q{constructor({strings:t,_$litType$:e},i){let n;this.parts=[];let r=0,s=0;const o=t.length-1,a=this.parts,[l,c]=G(t,e);if(this.el=Q.createElement(l,i),Z.currentNode=this.el.content,2===e||3===e){const t=this.el.content.firstChild;t.replaceWith(...t.childNodes)}for(;null!==(n=Z.nextNode())&&a.length<o;){if(1===n.nodeType){if(n.hasAttributes())for(const t of n.getAttributeNames())if(t.endsWith(S)){const e=c[s++],i=n.getAttribute(t).split(C),o=/([.?@])?(.*)/.exec(e);a.push({type:1,index:r,name:o[2],strings:i,ctor:"."===o[1]?it:"?"===o[1]?nt:"@"===o[1]?rt:et}),n.removeAttribute(t)}else t.startsWith(C)&&(a.push({type:6,index:r}),n.removeAttribute(t));if(B.test(n.tagName)){const t=n.textContent.split(C),e=t.length-1;if(e>0){n.textContent=x?x.emptyScript:"";for(let i=0;i<e;i++)n.append(t[i],P()),Z.nextNode(),a.push({type:2,index:++r});n.append(t[e],P())}}}else if(8===n.nodeType)if(n.data===k)a.push({type:2,index:r});else{let t=-1;for(;-1!==(t=n.data.indexOf(C,t+1));)a.push({type:7,index:r}),t+=C.length-1}r++}}static createElement(t,e){const i=M.createElement("template");return i.innerHTML=t,i}}function X(t,e,i=t,n){if(e===F)return e;let r=void 0!==n?i._$Co?.[n]:i._$Cl;const s=U(e)?void 0:e._$litDirective$;return r?.constructor!==s&&(r?._$AO?.(!1),void 0===s?r=void 0:(r=new s(t),r._$AT(t,i,n)),void 0!==n?(i._$Co??=[])[n]=r:i._$Cl=r),void 0!==r&&(e=X(t,r._$AS(t,e.values),r,n)),e}class Y{constructor(t,e){this._$AV=[],this._$AN=void 0,this._$AD=t,this._$AM=e}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(t){const{el:{content:e},parts:i}=this._$AD,n=(t?.creationScope??M).importNode(e,!0);Z.currentNode=n;let r=Z.nextNode(),s=0,o=0,a=i[0];for(;void 0!==a;){if(s===a.index){let e;2===a.type?e=new tt(r,r.nextSibling,this,t):1===a.type?e=new a.ctor(r,a.name,a.strings,this,t):6===a.type&&(e=new st(r,this,t)),this._$AV.push(e),a=i[++o]}s!==a?.index&&(r=Z.nextNode(),s++)}return Z.currentNode=M,n}p(t){let e=0;for(const i of this._$AV)void 0!==i&&(void 0!==i.strings?(i._$AI(t,i,e),e+=i.strings.length-2):i._$AI(t[e])),e++}}class tt{get _$AU(){return this._$AM?._$AU??this._$Cv}constructor(t,e,i,n){this.type=2,this._$AH=q,this._$AN=void 0,this._$AA=t,this._$AB=e,this._$AM=i,this.options=n,this._$Cv=n?.isConnected??!0}get parentNode(){let t=this._$AA.parentNode;const e=this._$AM;return void 0!==e&&11===t?.nodeType&&(t=e.parentNode),t}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(t,e=this){t=X(this,t,e),U(t)?t===q||null==t||""===t?(this._$AH!==q&&this._$AR(),this._$AH=q):t!==this._$AH&&t!==F&&this._(t):void 0!==t._$litType$?this.$(t):void 0!==t.nodeType?this.T(t):(t=>H(t)||"function"==typeof t?.[Symbol.iterator])(t)?this.k(t):this._(t)}O(t){return this._$AA.parentNode.insertBefore(t,this._$AB)}T(t){this._$AH!==t&&(this._$AR(),this._$AH=this.O(t))}_(t){this._$AH!==q&&U(this._$AH)?this._$AA.nextSibling.data=t:this.T(M.createTextNode(t)),this._$AH=t}$(t){const{values:e,_$litType$:i}=t,n="number"==typeof i?this._$AC(t):(void 0===i.el&&(i.el=Q.createElement(K(i.h,i.h[0]),this.options)),i);if(this._$AH?._$AD===n)this._$AH.p(e);else{const t=new Y(n,this),i=t.u(this.options);t.p(e),this.T(i),this._$AH=t}}_$AC(t){let e=J.get(t.strings);return void 0===e&&J.set(t.strings,e=new Q(t)),e}k(t){H(this._$AH)||(this._$AH=[],this._$AR());const e=this._$AH;let i,n=0;for(const r of t)n===e.length?e.push(i=new tt(this.O(P()),this.O(P()),this,this.options)):i=e[n],i._$AI(r),n++;n<e.length&&(this._$AR(i&&i._$AB.nextSibling,n),e.length=n)}_$AR(t=this._$AA.nextSibling,e){for(this._$AP?.(!1,!0,e);t!==this._$AB;){const e=A(t).nextSibling;A(t).remove(),t=e}}setConnected(t){void 0===this._$AM&&(this._$Cv=t,this._$AP?.(t))}}class et{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(t,e,i,n,r){this.type=1,this._$AH=q,this._$AN=void 0,this.element=t,this.name=e,this._$AM=n,this.options=r,i.length>2||""!==i[0]||""!==i[1]?(this._$AH=Array(i.length-1).fill(new String),this.strings=i):this._$AH=q}_$AI(t,e=this,i,n){const r=this.strings;let s=!1;if(void 0===r)t=X(this,t,e,0),s=!U(t)||t!==this._$AH&&t!==F,s&&(this._$AH=t);else{const n=t;let o,a;for(t=r[0],o=0;o<r.length-1;o++)a=X(this,n[i+o],e,o),a===F&&(a=this._$AH[o]),s||=!U(a)||a!==this._$AH[o],a===q?t=q:t!==q&&(t+=(a??"")+r[o+1]),this._$AH[o]=a}s&&!n&&this.j(t)}j(t){t===q?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,t??"")}}class it extends et{constructor(){super(...arguments),this.type=3}j(t){this.element[this.name]=t===q?void 0:t}}class nt extends et{constructor(){super(...arguments),this.type=4}j(t){this.element.toggleAttribute(this.name,!!t&&t!==q)}}class rt extends et{constructor(t,e,i,n,r){super(t,e,i,n,r),this.type=5}_$AI(t,e=this){if((t=X(this,t,e,0)??q)===F)return;const i=this._$AH,n=t===q&&i!==q||t.capture!==i.capture||t.once!==i.once||t.passive!==i.passive,r=t!==q&&(i===q||n);n&&this.element.removeEventListener(this.name,this,i),r&&this.element.addEventListener(this.name,this,t),this._$AH=t}handleEvent(t){"function"==typeof this._$AH?this._$AH.call(this.options?.host??this.element,t):this._$AH.handleEvent(t)}}class st{constructor(t,e,i){this.element=t,this.type=6,this._$AN=void 0,this._$AM=e,this.options=i}get _$AU(){return this._$AM._$AU}_$AI(t){X(this,t)}}const ot=v.litHtmlPolyfillSupport;ot?.(Q,tt),(v.litHtmlVersions??=[]).push("3.3.3");const at=globalThis;let lt=class extends w{constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){const t=super.createRenderRoot();return this.renderOptions.renderBefore??=t.firstChild,t}update(t){const e=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(t),this._$Do=((t,e,i)=>{const n=i?.renderBefore??e;let r=n._$litPart$;if(void 0===r){const t=i?.renderBefore??null;n._$litPart$=r=new tt(e.insertBefore(P(),t),t,void 0,i??{})}return r._$AI(t),r})(e,this.renderRoot,this.renderOptions)}connectedCallback(){super.connectedCallback(),this._$Do?.setConnected(!0)}disconnectedCallback(){super.disconnectedCallback(),this._$Do?.setConnected(!1)}render(){return F}};lt._$litElement$=!0,lt.finalized=!0,at.litElementHydrateSupport?.({LitElement:lt});const ct=at.litElementPolyfillSupport;ct?.({LitElement:lt}),(at.litElementVersions??=[]).push("4.2.2");const ht=1;let dt=class{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,i){this._$Ct=t,this._$AM=e,this._$Ci=i}_$AS(t,e){return this.update(t,e)}update(t,e){return this.render(...e)}};const pt="important",ut=" !"+pt,ft=(t=>(...e)=>({_$litDirective$:t,values:e}))(class extends dt{constructor(t){if(super(t),t.type!==ht||"style"!==t.name||t.strings?.length>2)throw Error("The `styleMap` directive must be used in the `style` attribute and must be the only part in the attribute.")}render(t){return Object.keys(t).reduce((e,i)=>{const n=t[i];return null==n?e:e+`${i=i.includes("-")?i:i.replace(/(?:^(webkit|moz|ms|o)|)(?=[A-Z])/g,"-$&").toLowerCase()}:${n};`},"")}update(t,[e]){const{style:i}=t.element;if(void 0===this.ft)return this.ft=new Set(Object.keys(e)),this.render(e);for(const t of this.ft)null==e[t]&&(this.ft.delete(t),t.includes("-")?i.removeProperty(t):i[t]=null);for(const t in e){const n=e[t];if(null!=n){this.ft.add(t);const e="string"==typeof n&&n.endsWith(ut);t.includes("-")||e?i.setProperty(t,e?n.slice(0,-11):n,e?pt:""):i[t]=n}}return F}}),gt=s`
+const t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,i=Symbol(),r=new WeakMap;let o=class{constructor(t,e,r){if(this._$cssResult$=!0,r!==i)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=t,this.t=e}get styleSheet(){let t=this.o;const i=this.t;if(e&&void 0===t){const e=void 0!==i&&1===i.length;e&&(t=r.get(i)),void 0===t&&((this.o=t=new CSSStyleSheet).replaceSync(this.cssText),e&&r.set(i,t))}return t}toString(){return this.cssText}};const n=(t,...e)=>{const r=1===t.length?t[0]:e.reduce((e,i,r)=>e+(t=>{if(!0===t._$cssResult$)return t.cssText;if("number"==typeof t)return t;throw Error("Value passed to 'css' function must be a 'css' function result: "+t+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(i)+t[r+1],t[0]);return new o(r,t,i)},s=e?t=>t:t=>t instanceof CSSStyleSheet?(t=>{let e="";for(const i of t.cssRules)e+=i.cssText;return(t=>new o("string"==typeof t?t:t+"",void 0,i))(e)})(t):t,{is:a,defineProperty:l,getOwnPropertyDescriptor:c,getOwnPropertyNames:h,getOwnPropertySymbols:d,getPrototypeOf:p}=Object,u=globalThis,f=u.trustedTypes,g=f?f.emptyScript:"",m=u.reactiveElementPolyfillSupport,y=(t,e)=>t,_={toAttribute(t,e){switch(e){case Boolean:t=t?g:null;break;case Object:case Array:t=null==t?t:JSON.stringify(t)}return t},fromAttribute(t,e){let i=t;switch(e){case Boolean:i=null!==t;break;case Number:i=null===t?null:Number(t);break;case Object:case Array:try{i=JSON.parse(t)}catch(t){i=null}}return i}},b=(t,e)=>!a(t,e),$={attribute:!0,type:String,converter:_,reflect:!1,useDefault:!1,hasChanged:b};Symbol.metadata??=Symbol("metadata"),u.litPropertyMetadata??=new WeakMap;let w=class extends HTMLElement{static addInitializer(t){this._$Ei(),(this.l??=[]).push(t)}static get observedAttributes(){return this.finalize(),this._$Eh&&[...this._$Eh.keys()]}static createProperty(t,e=$){if(e.state&&(e.attribute=!1),this._$Ei(),this.prototype.hasOwnProperty(t)&&((e=Object.create(e)).wrapped=!0),this.elementProperties.set(t,e),!e.noAccessor){const i=Symbol(),r=this.getPropertyDescriptor(t,i,e);void 0!==r&&l(this.prototype,t,r)}}static getPropertyDescriptor(t,e,i){const{get:r,set:o}=c(this.prototype,t)??{get(){return this[e]},set(t){this[e]=t}};return{get:r,set(e){const n=r?.call(this);o?.call(this,e),this.requestUpdate(t,n,i)},configurable:!0,enumerable:!0}}static getPropertyOptions(t){return this.elementProperties.get(t)??$}static _$Ei(){if(this.hasOwnProperty(y("elementProperties")))return;const t=p(this);t.finalize(),void 0!==t.l&&(this.l=[...t.l]),this.elementProperties=new Map(t.elementProperties)}static finalize(){if(this.hasOwnProperty(y("finalized")))return;if(this.finalized=!0,this._$Ei(),this.hasOwnProperty(y("properties"))){const t=this.properties,e=[...h(t),...d(t)];for(const i of e)this.createProperty(i,t[i])}const t=this[Symbol.metadata];if(null!==t){const e=litPropertyMetadata.get(t);if(void 0!==e)for(const[t,i]of e)this.elementProperties.set(t,i)}this._$Eh=new Map;for(const[t,e]of this.elementProperties){const i=this._$Eu(t,e);void 0!==i&&this._$Eh.set(i,t)}this.elementStyles=this.finalizeStyles(this.styles)}static finalizeStyles(t){const e=[];if(Array.isArray(t)){const i=new Set(t.flat(1/0).reverse());for(const t of i)e.unshift(s(t))}else void 0!==t&&e.push(s(t));return e}static _$Eu(t,e){const i=e.attribute;return!1===i?void 0:"string"==typeof i?i:"string"==typeof t?t.toLowerCase():void 0}constructor(){super(),this._$Ep=void 0,this.isUpdatePending=!1,this.hasUpdated=!1,this._$Em=null,this._$Ev()}_$Ev(){this._$ES=new Promise(t=>this.enableUpdating=t),this._$AL=new Map,this._$E_(),this.requestUpdate(),this.constructor.l?.forEach(t=>t(this))}addController(t){(this._$EO??=new Set).add(t),void 0!==this.renderRoot&&this.isConnected&&t.hostConnected?.()}removeController(t){this._$EO?.delete(t)}_$E_(){const t=new Map,e=this.constructor.elementProperties;for(const i of e.keys())this.hasOwnProperty(i)&&(t.set(i,this[i]),delete this[i]);t.size>0&&(this._$Ep=t)}createRenderRoot(){const i=this.shadowRoot??this.attachShadow(this.constructor.shadowRootOptions);return((i,r)=>{if(e)i.adoptedStyleSheets=r.map(t=>t instanceof CSSStyleSheet?t:t.styleSheet);else for(const e of r){const r=document.createElement("style"),o=t.litNonce;void 0!==o&&r.setAttribute("nonce",o),r.textContent=e.cssText,i.appendChild(r)}})(i,this.constructor.elementStyles),i}connectedCallback(){this.renderRoot??=this.createRenderRoot(),this.enableUpdating(!0),this._$EO?.forEach(t=>t.hostConnected?.())}enableUpdating(t){}disconnectedCallback(){this._$EO?.forEach(t=>t.hostDisconnected?.())}attributeChangedCallback(t,e,i){this._$AK(t,i)}_$ET(t,e){const i=this.constructor.elementProperties.get(t),r=this.constructor._$Eu(t,i);if(void 0!==r&&!0===i.reflect){const o=(void 0!==i.converter?.toAttribute?i.converter:_).toAttribute(e,i.type);this._$Em=t,null==o?this.removeAttribute(r):this.setAttribute(r,o),this._$Em=null}}_$AK(t,e){const i=this.constructor,r=i._$Eh.get(t);if(void 0!==r&&this._$Em!==r){const t=i.getPropertyOptions(r),o="function"==typeof t.converter?{fromAttribute:t.converter}:void 0!==t.converter?.fromAttribute?t.converter:_;this._$Em=r;const n=o.fromAttribute(e,t.type);this[r]=n??this._$Ej?.get(r)??n,this._$Em=null}}requestUpdate(t,e,i,r=!1,o){if(void 0!==t){const n=this.constructor;if(!1===r&&(o=this[t]),i??=n.getPropertyOptions(t),!((i.hasChanged??b)(o,e)||i.useDefault&&i.reflect&&o===this._$Ej?.get(t)&&!this.hasAttribute(n._$Eu(t,i))))return;this.C(t,e,i)}!1===this.isUpdatePending&&(this._$ES=this._$EP())}C(t,e,{useDefault:i,reflect:r,wrapped:o},n){i&&!(this._$Ej??=new Map).has(t)&&(this._$Ej.set(t,n??e??this[t]),!0!==o||void 0!==n)||(this._$AL.has(t)||(this.hasUpdated||i||(e=void 0),this._$AL.set(t,e)),!0===r&&this._$Em!==t&&(this._$Eq??=new Set).add(t))}async _$EP(){this.isUpdatePending=!0;try{await this._$ES}catch(t){Promise.reject(t)}const t=this.scheduleUpdate();return null!=t&&await t,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){if(!this.isUpdatePending)return;if(!this.hasUpdated){if(this.renderRoot??=this.createRenderRoot(),this._$Ep){for(const[t,e]of this._$Ep)this[t]=e;this._$Ep=void 0}const t=this.constructor.elementProperties;if(t.size>0)for(const[e,i]of t){const{wrapped:t}=i,r=this[e];!0!==t||this._$AL.has(e)||void 0===r||this.C(e,void 0,i,r)}}let t=!1;const e=this._$AL;try{t=this.shouldUpdate(e),t?(this.willUpdate(e),this._$EO?.forEach(t=>t.hostUpdate?.()),this.update(e)):this._$EM()}catch(e){throw t=!1,this._$EM(),e}t&&this._$AE(e)}willUpdate(t){}_$AE(t){this._$EO?.forEach(t=>t.hostUpdated?.()),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(t)),this.updated(t)}_$EM(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$ES}shouldUpdate(t){return!0}update(t){this._$Eq&&=this._$Eq.forEach(t=>this._$ET(t,this[t])),this._$EM()}updated(t){}firstUpdated(t){}};w.elementStyles=[],w.shadowRootOptions={mode:"open"},w[y("elementProperties")]=new Map,w[y("finalized")]=new Map,m?.({ReactiveElement:w}),(u.reactiveElementVersions??=[]).push("2.1.2");const v=globalThis,x=t=>t,A=v.trustedTypes,k=A?A.createPolicy("lit-html",{createHTML:t=>t}):void 0,E="$lit$",S=`lit$${Math.random().toFixed(9).slice(2)}$`,C="?"+S,O=`<${C}>`,M=document,P=()=>M.createComment(""),U=t=>null===t||"object"!=typeof t&&"function"!=typeof t,j=Array.isArray,R="[ \t\n\f\r]",N=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,H=/-->/g,T=/>/g,z=RegExp(`>|${R}(?:([^\\s"'>=/]+)(${R}*=${R}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`,"g"),I=/'/g,B=/"/g,D=/^(?:script|style|textarea|title)$/i,L=t=>(e,...i)=>({_$litType$:t,strings:e,values:i}),F=L(1),V=L(2),W=Symbol.for("lit-noChange"),q=Symbol.for("lit-nothing"),X=new WeakMap,Y=M.createTreeWalker(M,129);function J(t,e){if(!j(t)||!t.hasOwnProperty("raw"))throw Error("invalid template strings array");return void 0!==k?k.createHTML(e):e}const K=(t,e)=>{const i=t.length-1,r=[];let o,n=2===e?"<svg>":3===e?"<math>":"",s=N;for(let e=0;e<i;e++){const i=t[e];let a,l,c=-1,h=0;for(;h<i.length&&(s.lastIndex=h,l=s.exec(i),null!==l);)h=s.lastIndex,s===N?"!--"===l[1]?s=H:void 0!==l[1]?s=T:void 0!==l[2]?(D.test(l[2])&&(o=RegExp("</"+l[2],"g")),s=z):void 0!==l[3]&&(s=z):s===z?">"===l[0]?(s=o??N,c=-1):void 0===l[1]?c=-2:(c=s.lastIndex-l[2].length,a=l[1],s=void 0===l[3]?z:'"'===l[3]?B:I):s===B||s===I?s=z:s===H||s===T?s=N:(s=z,o=void 0);const d=s===z&&t[e+1].startsWith("/>")?" ":"";n+=s===N?i+O:c>=0?(r.push(a),i.slice(0,c)+E+i.slice(c)+S+d):i+S+(-2===c?e:d)}return[J(t,n+(t[i]||"<?>")+(2===e?"</svg>":3===e?"</math>":"")),r]};class Z{constructor({strings:t,_$litType$:e},i){let r;this.parts=[];let o=0,n=0;const s=t.length-1,a=this.parts,[l,c]=K(t,e);if(this.el=Z.createElement(l,i),Y.currentNode=this.el.content,2===e||3===e){const t=this.el.content.firstChild;t.replaceWith(...t.childNodes)}for(;null!==(r=Y.nextNode())&&a.length<s;){if(1===r.nodeType){if(r.hasAttributes())for(const t of r.getAttributeNames())if(t.endsWith(E)){const e=c[n++],i=r.getAttribute(t).split(S),s=/([.?@])?(.*)/.exec(e);a.push({type:1,index:o,name:s[2],strings:i,ctor:"."===s[1]?it:"?"===s[1]?rt:"@"===s[1]?ot:et}),r.removeAttribute(t)}else t.startsWith(S)&&(a.push({type:6,index:o}),r.removeAttribute(t));if(D.test(r.tagName)){const t=r.textContent.split(S),e=t.length-1;if(e>0){r.textContent=A?A.emptyScript:"";for(let i=0;i<e;i++)r.append(t[i],P()),Y.nextNode(),a.push({type:2,index:++o});r.append(t[e],P())}}}else if(8===r.nodeType)if(r.data===C)a.push({type:2,index:o});else{let t=-1;for(;-1!==(t=r.data.indexOf(S,t+1));)a.push({type:7,index:o}),t+=S.length-1}o++}}static createElement(t,e){const i=M.createElement("template");return i.innerHTML=t,i}}function G(t,e,i=t,r){if(e===W)return e;let o=void 0!==r?i._$Co?.[r]:i._$Cl;const n=U(e)?void 0:e._$litDirective$;return o?.constructor!==n&&(o?._$AO?.(!1),void 0===n?o=void 0:(o=new n(t),o._$AT(t,i,r)),void 0!==r?(i._$Co??=[])[r]=o:i._$Cl=o),void 0!==o&&(e=G(t,o._$AS(t,e.values),o,r)),e}class Q{constructor(t,e){this._$AV=[],this._$AN=void 0,this._$AD=t,this._$AM=e}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(t){const{el:{content:e},parts:i}=this._$AD,r=(t?.creationScope??M).importNode(e,!0);Y.currentNode=r;let o=Y.nextNode(),n=0,s=0,a=i[0];for(;void 0!==a;){if(n===a.index){let e;2===a.type?e=new tt(o,o.nextSibling,this,t):1===a.type?e=new a.ctor(o,a.name,a.strings,this,t):6===a.type&&(e=new nt(o,this,t)),this._$AV.push(e),a=i[++s]}n!==a?.index&&(o=Y.nextNode(),n++)}return Y.currentNode=M,r}p(t){let e=0;for(const i of this._$AV)void 0!==i&&(void 0!==i.strings?(i._$AI(t,i,e),e+=i.strings.length-2):i._$AI(t[e])),e++}}class tt{get _$AU(){return this._$AM?._$AU??this._$Cv}constructor(t,e,i,r){this.type=2,this._$AH=q,this._$AN=void 0,this._$AA=t,this._$AB=e,this._$AM=i,this.options=r,this._$Cv=r?.isConnected??!0}get parentNode(){let t=this._$AA.parentNode;const e=this._$AM;return void 0!==e&&11===t?.nodeType&&(t=e.parentNode),t}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(t,e=this){t=G(this,t,e),U(t)?t===q||null==t||""===t?(this._$AH!==q&&this._$AR(),this._$AH=q):t!==this._$AH&&t!==W&&this._(t):void 0!==t._$litType$?this.$(t):void 0!==t.nodeType?this.T(t):(t=>j(t)||"function"==typeof t?.[Symbol.iterator])(t)?this.k(t):this._(t)}O(t){return this._$AA.parentNode.insertBefore(t,this._$AB)}T(t){this._$AH!==t&&(this._$AR(),this._$AH=this.O(t))}_(t){this._$AH!==q&&U(this._$AH)?this._$AA.nextSibling.data=t:this.T(M.createTextNode(t)),this._$AH=t}$(t){const{values:e,_$litType$:i}=t,r="number"==typeof i?this._$AC(t):(void 0===i.el&&(i.el=Z.createElement(J(i.h,i.h[0]),this.options)),i);if(this._$AH?._$AD===r)this._$AH.p(e);else{const t=new Q(r,this),i=t.u(this.options);t.p(e),this.T(i),this._$AH=t}}_$AC(t){let e=X.get(t.strings);return void 0===e&&X.set(t.strings,e=new Z(t)),e}k(t){j(this._$AH)||(this._$AH=[],this._$AR());const e=this._$AH;let i,r=0;for(const o of t)r===e.length?e.push(i=new tt(this.O(P()),this.O(P()),this,this.options)):i=e[r],i._$AI(o),r++;r<e.length&&(this._$AR(i&&i._$AB.nextSibling,r),e.length=r)}_$AR(t=this._$AA.nextSibling,e){for(this._$AP?.(!1,!0,e);t!==this._$AB;){const e=x(t).nextSibling;x(t).remove(),t=e}}setConnected(t){void 0===this._$AM&&(this._$Cv=t,this._$AP?.(t))}}class et{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(t,e,i,r,o){this.type=1,this._$AH=q,this._$AN=void 0,this.element=t,this.name=e,this._$AM=r,this.options=o,i.length>2||""!==i[0]||""!==i[1]?(this._$AH=Array(i.length-1).fill(new String),this.strings=i):this._$AH=q}_$AI(t,e=this,i,r){const o=this.strings;let n=!1;if(void 0===o)t=G(this,t,e,0),n=!U(t)||t!==this._$AH&&t!==W,n&&(this._$AH=t);else{const r=t;let s,a;for(t=o[0],s=0;s<o.length-1;s++)a=G(this,r[i+s],e,s),a===W&&(a=this._$AH[s]),n||=!U(a)||a!==this._$AH[s],a===q?t=q:t!==q&&(t+=(a??"")+o[s+1]),this._$AH[s]=a}n&&!r&&this.j(t)}j(t){t===q?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,t??"")}}class it extends et{constructor(){super(...arguments),this.type=3}j(t){this.element[this.name]=t===q?void 0:t}}class rt extends et{constructor(){super(...arguments),this.type=4}j(t){this.element.toggleAttribute(this.name,!!t&&t!==q)}}class ot extends et{constructor(t,e,i,r,o){super(t,e,i,r,o),this.type=5}_$AI(t,e=this){if((t=G(this,t,e,0)??q)===W)return;const i=this._$AH,r=t===q&&i!==q||t.capture!==i.capture||t.once!==i.once||t.passive!==i.passive,o=t!==q&&(i===q||r);r&&this.element.removeEventListener(this.name,this,i),o&&this.element.addEventListener(this.name,this,t),this._$AH=t}handleEvent(t){"function"==typeof this._$AH?this._$AH.call(this.options?.host??this.element,t):this._$AH.handleEvent(t)}}class nt{constructor(t,e,i){this.element=t,this.type=6,this._$AN=void 0,this._$AM=e,this.options=i}get _$AU(){return this._$AM._$AU}_$AI(t){G(this,t)}}const st=v.litHtmlPolyfillSupport;st?.(Z,tt),(v.litHtmlVersions??=[]).push("3.3.3");const at=globalThis;let lt=class extends w{constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){const t=super.createRenderRoot();return this.renderOptions.renderBefore??=t.firstChild,t}update(t){const e=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(t),this._$Do=((t,e,i)=>{const r=i?.renderBefore??e;let o=r._$litPart$;if(void 0===o){const t=i?.renderBefore??null;r._$litPart$=o=new tt(e.insertBefore(P(),t),t,void 0,i??{})}return o._$AI(t),o})(e,this.renderRoot,this.renderOptions)}connectedCallback(){super.connectedCallback(),this._$Do?.setConnected(!0)}disconnectedCallback(){super.disconnectedCallback(),this._$Do?.setConnected(!1)}render(){return W}};lt._$litElement$=!0,lt.finalized=!0,at.litElementHydrateSupport?.({LitElement:lt});const ct=at.litElementPolyfillSupport;ct?.({LitElement:lt}),(at.litElementVersions??=[]).push("4.2.2");const ht=1;let dt=class{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,i){this._$Ct=t,this._$AM=e,this._$Ci=i}_$AS(t,e){return this.update(t,e)}update(t,e){return this.render(...e)}};const pt="important",ut=" !"+pt,ft=(t=>(...e)=>({_$litDirective$:t,values:e}))(class extends dt{constructor(t){if(super(t),t.type!==ht||"style"!==t.name||t.strings?.length>2)throw Error("The `styleMap` directive must be used in the `style` attribute and must be the only part in the attribute.")}render(t){return Object.keys(t).reduce((e,i)=>{const r=t[i];return null==r?e:e+`${i=i.includes("-")?i:i.replace(/(?:^(webkit|moz|ms|o)|)(?=[A-Z])/g,"-$&").toLowerCase()}:${r};`},"")}update(t,[e]){const{style:i}=t.element;if(void 0===this.ft)return this.ft=new Set(Object.keys(e)),this.render(e);for(const t of this.ft)null==e[t]&&(this.ft.delete(t),t.includes("-")?i.removeProperty(t):i[t]=null);for(const t in e){const r=e[t];if(null!=r){this.ft.add(t);const e="string"==typeof r&&r.endsWith(ut);t.includes("-")||e?i.setProperty(t,e?r.slice(0,-11):r,e?pt:""):i[t]=r}}return W}}),gt=n`
   :host {
     display: block;
   }
@@ -178,7 +178,7 @@ const t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow
   }
 
   .plan svg {
-    width: min(100%, 220px);
+    width: min(100%, 280px);
     height: auto;
     display: block;
   }
@@ -214,16 +214,44 @@ const t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow
     transition: fill 0.2s ease;
   }
 
-  .window.open {
+  .window.is-open {
     fill: var(--error-color, #e53935);
     stroke: #b71c1c;
   }
 
-  .window.interactive {
+  .door-panel {
+    fill: #f7f8fa;
+    stroke: #3e474f;
+    stroke-width: 1.6;
+    stroke-linejoin: round;
+  }
+
+  .aperture {
+    fill: #2c3136;
+    stroke: none;
+  }
+
+  .boot {
+    fill: #f7f8fa;
+    stroke: #3e474f;
+    stroke-width: 1.6;
+    stroke-linejoin: round;
+  }
+
+  .boot.is-open {
+    fill: var(--warning-color, #fb8c00);
+    stroke: #e65100;
+  }
+
+  .window.interactive,
+  .door-panel.interactive,
+  .boot.interactive {
     cursor: pointer;
   }
 
-  .window:focus-visible {
+  .window:focus-visible,
+  .door-panel:focus-visible,
+  .boot:focus-visible {
     outline: none;
     stroke: var(--primary-color);
     stroke-width: 2.5;
@@ -265,17 +293,54 @@ const t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow
     fill: #4e555c;
   }
 
-  .window-alert,
-  .window-key {
+  .plan-alert,
+  .plan-key {
     margin: 0;
     font-size: 0.85rem;
     text-align: center;
     color: var(--secondary-text-color);
   }
 
-  .window-alert {
+  .plan-alert {
     color: var(--error-color, #e53935);
     font-weight: 600;
+  }
+
+  .battery {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    margin-bottom: 12px;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: var(--secondary-background-color, rgba(0, 0, 0, 0.05));
+    color: inherit;
+    font: inherit;
+    text-align: left;
+  }
+
+  button.battery {
+    cursor: pointer;
+  }
+
+  .battery ha-icon {
+    --mdc-icon-size: 32px;
+    color: var(--primary-color);
+  }
+
+  .battery ha-icon.low {
+    color: var(--error-color, #f44336);
+  }
+
+  .battery ha-icon.medium {
+    color: var(--warning-color, #ff9800);
+  }
+
+  .battery-copy {
+    flex: 1;
+    min-width: 0;
   }
 
   .empty {
@@ -290,28 +355,66 @@ const t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow
       transition: none;
     }
   }
-`,_t=[{key:"front_left_window_entity",id:"front-left",label:"Front left window"},{key:"front_right_window_entity",id:"front-right",label:"Front right window"},{key:"rear_left_window_entity",id:"rear-left",label:"Rear left window"},{key:"rear_right_window_entity",id:"rear-right",label:"Rear right window"}],mt=new Set(["on","open","opened","down","true","yes","opening","closing","ajar","tilted","vent","partial"]),yt=new Set(["off","closed","up","false","no","shut","0"]);function $t(t){if(!t)return!1;const e=String(t.state).trim().toLowerCase();if(["unavailable","unknown","none",""].includes(e))return!1;if(mt.has(e))return!0;if(yt.has(e))return!1;const i=Number(e);return Number.isFinite(i)?i>0:!0===t.attributes?.window_open||!0===t.attributes?.open}function bt(t,e,i){const n=t.configured&&Boolean(t.stateObj),r=function(t){if(!t.configured)return"not configured";if(!t.stateObj)return"not found";const e=String(t.stateObj.state).trim().toLowerCase();return"unavailable"===e?"unavailable":"unknown"===e||"none"===e||""===e?"unknown":t.open?"down":"closed"}(t),s=`${t.label}, ${r}`,o=()=>{n&&i(t.entityId)};return V`
+`,mt=[{key:"front_left_door_entity",id:"front-left",label:"Front left door",short:"Front left"},{key:"front_right_door_entity",id:"front-right",label:"Front right door",short:"Front right"},{key:"rear_left_door_entity",id:"rear-left",label:"Rear left door",short:"Rear left"},{key:"rear_right_door_entity",id:"rear-right",label:"Rear right door",short:"Rear right"}],yt=[{key:"front_left_window_entity",id:"front-left",label:"Front left window",short:"Front left"},{key:"front_right_window_entity",id:"front-right",label:"Front right window",short:"Front right"},{key:"rear_left_window_entity",id:"rear-left",label:"Rear left window",short:"Rear left"},{key:"rear_right_window_entity",id:"rear-right",label:"Rear right window",short:"Rear right"}],_t={key:"boot_entity",id:"boot",label:"Boot",short:"Boot"},bt=[{value:"mi",label:"Miles"},{value:"km",label:"Kilometres"}],$t=new Set(["on","open","opened","down","true","yes","opening","closing","ajar","tilted","vent","partial"]),wt=new Set(["off","closed","up","false","no","shut","0"]);function vt(t){if(!t)return!1;const e=String(t.state).trim().toLowerCase();if(["unavailable","unknown","none",""].includes(e))return!1;if($t.has(e))return!0;if(wt.has(e))return!1;const i=Number(e);return Number.isFinite(i)?i>0:!0===t.attributes?.open}const xt=1.609344;function At(t){const e=String(t??"").trim().toLowerCase();return["mi","mile","miles"].includes(e)?"mi":["km","kilometer","kilometre","kilometers","kilometres"].includes(e)?"km":""}function kt(t){return new Intl.NumberFormat("en-GB",{maximumFractionDigits:0}).format(Math.round(t))}function Et(t){return"km"===At(t)?"km":"mi"}const St={"front-left":{hingeX:142,hingeY:168,angle:-64,panel:"108,168 142,168 140,252 106,250",window:"114,182 134,180 133,236 113,234",mirror:{cx:98,cy:186,rx:13,ry:8}},"front-right":{hingeX:178,hingeY:168,angle:64,panel:"178,168 212,168 214,250 180,252",window:"186,180 206,182 207,234 187,236",mirror:{cx:222,cy:186,rx:13,ry:8}},"rear-left":{hingeX:142,hingeY:262,angle:-64,panel:"108,260 142,260 140,346 106,344",window:"114,274 134,272 133,328 113,326"},"rear-right":{hingeX:178,hingeY:262,angle:64,panel:"178,260 212,260 214,344 180,346",window:"186,272 206,274 207,326 187,328"}};function Ct(t,e,i,r,o){const n=t.configured&&Boolean(t.stateObj),s=t.configured?t.stateObj?t.open?r:"closed":"not found":"not configured",a=`${t.label}, ${s}`,l=()=>{n&&o(t.entityId)};return V`
     <polygon
-      class="window ${t.open?"open":""} ${n?"interactive":""}"
-      points=${e}
+      class="${e} ${t.open?"is-open":""} ${n?"interactive":""}"
+      points=${i}
       role=${n?"button":"img"}
       tabindex=${n?"0":q}
-      aria-label=${s}
-      @click=${o}
-      @keydown=${t=>function(t,e){"Enter"!==t.key&&" "!==t.key||(t.preventDefault(),e())}(t,o)}
+      aria-label=${a}
+      @click=${l}
+      @keydown=${t=>function(t,e){"Enter"!==t.key&&" "!==t.key||(t.preventDefault(),e())}(t,l)}
     >
-      <title>${s}</title>
+      <title>${a}</title>
     </polygon>
-  `}const wt=[{name:"title",label:"Card title",selector:{text:{}}},{name:"car_icon",label:"Header icon",selector:{icon:{}}},{name:"battery_entity",label:"Battery / fuel level",selector:{entity:{domain:["sensor"]}}},{name:"battery_icon",label:"Battery / fuel icon",selector:{icon:{}}},{name:"range_entity",label:"Remaining range",selector:{entity:{domain:["sensor"]}}},{name:"range_icon",label:"Range icon",selector:{icon:{}}},{name:"location_entity",label:"Location",selector:{entity:{domain:["device_tracker","person","sensor"]}}},{name:"location_icon",label:"Location icon",selector:{icon:{}}},{name:"charging_entity",label:"Charging status",selector:{entity:{domain:["binary_sensor","sensor"]}}},{name:"charging_icon",label:"Charging icon",selector:{icon:{}}},{name:"front_left_window_entity",label:"Front left window",selector:{entity:{domain:["binary_sensor","sensor","cover"]}}},{name:"front_right_window_entity",label:"Front right window",selector:{entity:{domain:["binary_sensor","sensor","cover"]}}},{name:"rear_left_window_entity",label:"Rear left window",selector:{entity:{domain:["binary_sensor","sensor","cover"]}}},{name:"rear_right_window_entity",label:"Rear right window",selector:{entity:{domain:["binary_sensor","sensor","cover"]}}}],vt={battery_entity:"Numeric level. A progress bar is shown when the value is a percentage.",battery_icon:"Optional. Leave empty for an automatic battery or charging icon.",range_entity:"Remaining range sensor. The entity's own unit is displayed.",location_entity:"Device tracker, person, or location sensor. home and not_home are shown as Home and Away.",charging_entity:"On, charging, plugged in, or connected is treated as charging.",charging_icon:"Optional icon shown while the vehicle is charging.",front_left_window_entity:"Vehicle's front left, shown on the left of the plan. On, open, or a position above 0 turns that window red.",front_right_window_entity:"Vehicle's front right. On, open, or a position above 0 turns that window red.",rear_left_window_entity:"Vehicle's rear left. On, open, or a position above 0 turns that window red.",rear_right_window_entity:"Vehicle's rear right. On, open, or a position above 0 turns that window red."};class At extends lt{static get properties(){return{hass:{attribute:!1},_config:{attribute:!1}}}setConfig(t){if(!t||"object"!=typeof t||Array.isArray(t))throw new Error("Invalid card configuration");this._config={...t}}_computeLabel=t=>t.label||t.name;_computeHelper=t=>vt[t.name];_valueChanged(t){if(t.stopPropagation(),!this._config||!this.hass||!t.detail?.value)return;const e={...this._config,...t.detail.value};for(const[t,i]of Object.entries(e))""!==i&&null!=i||delete e[t];JSON.stringify(e)!==JSON.stringify(this._config)&&(this._config=e,this.dispatchEvent(new CustomEvent("config-changed",{detail:{config:e},bubbles:!0,composed:!0})))}render(){return this.hass&&this._config?W`
+  `}function Ot(t,e,i,r){const o=St[t],n=e[t],s=i[t],a=n.open?`rotate(${o.angle} ${o.hingeX} ${o.hingeY})`:"rotate(0 0 0)";return V`
+    <g class="door" transform=${a}>
+      ${Ct(n,"door-panel",o.panel,"open",r)}
+      ${Ct(s,"window",o.window,"down",r)}
+      ${o.mirror?V`<ellipse class="mirror" cx=${o.mirror.cx} cy=${o.mirror.cy} rx=${o.mirror.rx} ry=${o.mirror.ry}></ellipse>`:q}
+    </g>
+  `}const Mt={hatchback:{id:"hatchback",label:"Hatchback",render:function({doors:t,windows:e,boot:i,summary:r,onSelect:o}){const n=i.open?"translate(0 22)":"translate(0 0)";return V`
+    <svg viewBox="0 0 320 540" role="img" aria-label="Top view of the hatchback, front at the top. ${r}">
+      <g class="wheel"><rect x="78" y="146" width="30" height="68" rx="14"></rect><rect class="rim" x="85" y="162" width="16" height="36" rx="6"></rect></g>
+      <g class="wheel"><rect x="212" y="146" width="30" height="68" rx="14"></rect><rect class="rim" x="219" y="162" width="16" height="36" rx="6"></rect></g>
+      <g class="wheel"><rect x="80" y="328" width="30" height="68" rx="14"></rect><rect class="rim" x="87" y="344" width="16" height="36" rx="6"></rect></g>
+      <g class="wheel"><rect x="210" y="328" width="30" height="68" rx="14"></rect><rect class="rim" x="217" y="344" width="16" height="36" rx="6"></rect></g>
+
+      <path class="body" d="M132 46c16-16 40-16 56 0l18 28c22 16 34 44 32 74l-4 214c-2 42-16 78-38 96-14 12-58 12-72 0-22-18-36-54-38-96l-4-214c-2-30 10-58 32-74z"></path>
+      <polygon class="aperture" points="112,174 138,174 136,248 110,246"></polygon>
+      <polygon class="aperture" points="182,174 208,174 210,246 184,248"></polygon>
+      <polygon class="aperture" points="112,264 138,264 136,342 110,340"></polygon>
+      <polygon class="aperture" points="182,264 208,264 210,340 184,342"></polygon>
+      <polygon class="aperture" points="140,404 180,404 174,446 146,446"></polygon>
+
+      ${Ot("front-left",t,e,o)}
+      ${Ot("front-right",t,e,o)}
+      ${Ot("rear-left",t,e,o)}
+      ${Ot("rear-right",t,e,o)}
+
+      <path class="hood" d="M138 72h44l8 34h-60z"></path>
+      <ellipse class="badge" cx="160" cy="88" rx="7" ry="7"></ellipse>
+      <path class="headlight" d="M118 70h16l4 14h-24z"></path>
+      <path class="headlight" d="M202 70h-16l-4 14h24z"></path>
+      <path class="glass" d="M126 118h68l8 42h-84z"></path>
+      <path class="roof" d="M146 176h28v156h-28z"></path>
+
+      <g class="boot-lid" transform=${n}>
+        ${Ct(i,"boot","132,400 188,400 180,450 140,450","open",o)}
+        <path class="taillight" d="M138 436h16l2 8h-16z"></path>
+        <path class="taillight" d="M182 436h-16l-2 8h16z"></path>
+      </g>
+    </svg>
+  `}}};const Pt=["binary_sensor","sensor","cover"];function Ut(t,e,i){return{name:t,label:e,helper:i,selector:{entity:{domain:Pt}}}}function jt(t,e,i){return{name:t,label:e,helper:i,selector:{select:{mode:"dropdown",options:bt}}}}function Rt(t,e){return{type:"expandable",name:"",flatten:!0,title:t,schema:e}}const Nt=[Rt("Vehicle",[{name:"title",label:"Card title",selector:{text:{}}},{name:"car_model",label:"Vehicle plan",helper:"Top-down view drawn on the card. More vehicles can be added here later.",selector:{select:{mode:"dropdown",options:[{value:"hatchback",label:"Hatchback"}]}}}]),Rt("Doors",mt.map(t=>Ut(t.key,t.label,"On or open swings this door out. Left and right are the vehicle's own sides, with the front of the plan at the top."))),Rt("Windows",yt.map(t=>Ut(t.key,t.label,"On, open, down, or a position above 0 turns this window red, with the door open or shut."))),Rt("Boot",[Ut(_t.key,_t.label,"On or open highlights the boot and shows it ajar.")]),Rt("Battery",[{name:"battery_entity",label:"State of charge",helper:"Battery percentage. The icon changes with the level.",selector:{entity:{domain:["sensor"]}}}]),Rt("Mileage and range",[{name:"mileage_entity",label:"Mileage",helper:"Odometer entity.",selector:{entity:{domain:["sensor"]}}},jt("mileage_unit","Mileage entity unit","Unit the mileage entity reports."),{name:"range_entity",label:"Range",helper:"Estimated range remaining.",selector:{entity:{domain:["sensor"]}}},jt("range_unit","Range entity unit","Unit the range entity reports."),jt("display_unit","Display unit","Mileage and range are converted into this unit.")])],Ht=Object.fromEntries(Nt.flatMap(t=>t.schema).filter(t=>t.helper).map(t=>[t.name,t.helper]));class Tt extends lt{static get properties(){return{hass:{attribute:!1},_config:{attribute:!1}}}setConfig(t){if(!t||"object"!=typeof t||Array.isArray(t))throw new Error("Invalid card configuration");this._config={...t}}_computeLabel=t=>t.label||t.name;_computeHelper=t=>Ht[t.name];_valueChanged(t){if(t.stopPropagation(),!this._config||!this.hass||!t.detail?.value)return;const e={...this._config,...t.detail.value};for(const[t,i]of Object.entries(e))""!==i&&null!=i||delete e[t];JSON.stringify(e)!==JSON.stringify(this._config)&&(this._config=e,this.dispatchEvent(new CustomEvent("config-changed",{detail:{config:e},bubbles:!0,composed:!0})))}render(){return this.hass&&this._config?F`
       <ha-form
         .hass=${this.hass}
         .data=${this._config}
-        .schema=${wt}
+        .schema=${Nt}
         .computeLabel=${this._computeLabel}
         .computeHelper=${this._computeHelper}
         @value-changed=${this._valueChanged}
       ></ha-form>
-    `:W``}static styles=s`
+    `:F``}static styles=n`
     :host {
       display: block;
     }
@@ -320,107 +423,55 @@ const t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow
       display: block;
       padding: 16px;
     }
-  `}customElements.get("car-info-card-editor")||customElements.define("car-info-card-editor",At);const xt=new Set(["unavailable","unknown","none",""]),Et=new Set(["on","true","charging","plugged_in","plugged in","connected"]);function St(t){return"string"==typeof t?t.trim():""}function Ct(t){return!t||xt.has(String(t.state).trim().toLowerCase())}function kt(t){if(Ct(t))return!1;const e=String(t.state).trim().toLowerCase();return!!Et.has(e)||!0===t.attributes?.charging}function Ot(t){return String(t).replace(/[_-]+/g," ").trim().replace(/\b\w/g,t=>t.toUpperCase())}function Mt(t){if(!t)return"Not found";const e=String(t.state).trim().toLowerCase();return"unavailable"===e?"Unavailable":"unknown"===e||"none"===e||""===e?"Unknown":t.state}console.info("%c CAR-INFO-CARD %c 1.1.0 ","color: #fff; background: #03a9f4; font-weight: 700;","color: #03a9f4; background: #fff; font-weight: 700;");class Pt extends lt{static get properties(){return{hass:{attribute:!1},_config:{attribute:!1}}}static get styles(){return gt}static async getConfigElement(){return document.createElement("car-info-card-editor")}static getStubConfig(t){const e=t?.states??{},i=Object.keys(e),n=i.find(t=>t.startsWith("sensor.")&&/battery|fuel|soc/i.test(t)),r=i.find(t=>t.startsWith("sensor.")&&/range/i.test(t)&&t!==n),s=i.find(t=>t.startsWith("device_tracker.")||t.startsWith("person.")),o=i.find(t=>/charg/i.test(t)&&(t.startsWith("binary_sensor.")||t.startsWith("sensor."))),a=i.filter(t=>/window/i.test(t)),l=new Set,c={};for(const t of _t){const e=new RegExp(t.id.replace("-","[-_ ]"),"i"),i=a.find(t=>!l.has(t)&&e.test(t));i&&(l.add(i),c[t.key]=i)}return{title:"My Vehicle",car_icon:"mdi:car",...n?{battery_entity:n}:{},...r?{range_entity:r}:{},...s?{location_entity:s}:{},...o?{charging_entity:o}:{},...c}}setConfig(t){if(!t||"object"!=typeof t||Array.isArray(t))throw new Error("Card configuration must be an object");this._config={title:"My Vehicle",car_icon:"mdi:car",...t}}getCardSize(){return 6}_windowModels(){return _t.map(t=>{const e=this._resolve(this._config[t.key]);return{...t,...e,open:e.configured&&$t(e.stateObj)}})}_resolve(t){const e=St(t);return e?{configured:!0,entityId:e,stateObj:this.hass?.states?.[e]??null}:{configured:!1,entityId:"",stateObj:null}}_openMoreInfo(t){if(!t||!this.hass?.states?.[t])return;const e=new Event("hass-more-info",{bubbles:!0,composed:!0});e.detail={entityId:t},this.dispatchEvent(e)}_renderChargingIndicator(t){const e=kt(t),i=function(t){if(!t)return"Not found";const e=String(t.state).trim().toLowerCase();return"unavailable"===e?"Unavailable":"unknown"===e||"none"===e||""===e?"Unknown":kt(t)?"Charging":["off","false","not_charging","not charging","disconnected","unplugged","idle"].includes(e)?"Not charging":Ot(t.state)}(t),n=e?St(this._config.charging_icon)||"mdi:ev-station":"mdi:power-plug-off";return W`
-      <span class="charge-indicator ${e?"charging":"not-charging"}" title=${i} role="img" aria-label=${i}>
-        <ha-icon .icon=${n}></ha-icon>
-        <span>${i}</span>
-      </span>
-    `}_renderBox(t,e){return t.configured?t.stateObj?W`
-      <button class="info-box" type="button" @click=${()=>this._openMoreInfo(t.entityId)}>
-        ${e}
+  `}customElements.get("car-info-card-editor")||customElements.define("car-info-card-editor",Tt);const zt=new Set(["unavailable","unknown","none",""]);function It(t){return"string"==typeof t?t.trim():""}function Bt(t){if(function(t){return!t||zt.has(String(t.state).trim().toLowerCase())}(t))return null;const e=Number(t.state);return Number.isFinite(e)?e:null}function Dt(t){if(!t)return"Not found";const e=String(t.state).trim().toLowerCase();return"unavailable"===e?"Unavailable":"unknown"===e||"none"===e||""===e?"Unknown":t.state}function Lt(t,e,i){return At(t)||function(t){return At(t?.attributes?.unit_of_measurement)}(e)||At(i)||"mi"}console.info("%c CAR-INFO-CARD %c 1.2.0 ","color: #fff; background: #03a9f4; font-weight: 700;","color: #03a9f4; background: #fff; font-weight: 700;");class Ft extends lt{static get properties(){return{hass:{attribute:!1},_config:{attribute:!1}}}static get styles(){return gt}static async getConfigElement(){return document.createElement("car-info-card-editor")}static getStubConfig(t){const e=Object.keys(t?.states??{}),i=t=>e.find(e=>t.test(e)),r={title:"My Vehicle",car_model:"hatchback",mileage_unit:"mi",range_unit:"mi",display_unit:"mi"},o=i(/^sensor\..*(battery|soc)/i),n=i(/^sensor\..*(odometer|mileage|total_distance)/i),s=i(/^sensor\..*range/i),a=i(/(boot|trunk|tailgate)/i);o&&(r.battery_entity=o),n&&(r.mileage_entity=n),s&&s!==n&&(r.range_entity=s),a&&(r.boot_entity=a);for(const t of[...mt,...yt]){const i=new RegExp(t.id.replace("-","[-_ ]"),"i"),o=t.key.includes("door")?"door":"window",n=e.find(t=>i.test(t)&&new RegExp(o,"i").test(t));n&&(r[t.key]=n)}return r}setConfig(t){if(!t||"object"!=typeof t||Array.isArray(t))throw new Error("Card configuration must be an object");this._config={title:"My Vehicle",car_model:"hatchback",mileage_unit:"mi",range_unit:"mi",display_unit:"mi",...t}}getCardSize(){return 7}_resolve(t){const e=It(t);return e?{configured:!0,entityId:e,stateObj:this.hass?.states?.[e]??null}:{configured:!1,entityId:"",stateObj:null}}_panel(t){const e=this._resolve(this._config[t.key]);return{...t,...e,open:e.configured&&vt(e.stateObj)}}_openMoreInfo(t){if(!t||!this.hass?.states?.[t])return;const e=new Event("hass-more-info",{bubbles:!0,composed:!0});e.detail={entityId:t},this.dispatchEvent(e)}_distance(t,e){const i=this._resolve(this._config[t]),r=At(this._config.display_unit)||"mi";if(!i.configured)return{...i,text:"",unit:Et(r)};const o=Bt(i.stateObj);if(null==o)return{...i,text:Dt(i.stateObj),unit:""};const n=function(t,e,i){const r=At(e),o=At(i);return Number.isFinite(t)&&r&&o&&r!==o?"mi"===r&&"km"===o?t*xt:t/xt:t}(o,Lt(this._config[e],i.stateObj,r),r);return{...i,text:kt(n),unit:Et(r)}}_renderDistance(t,e){if(!e.configured)return q;const i=F`
+      <span class="label">${t}</span>
+      <div class="value-container">
+        <span class="value">${e.text}</span>
+        ${e.unit?F`<span class="unit">${e.unit}</span>`:q}
+      </div>
+    `;return e.stateObj?F`
+      <button class="info-box" type="button" @click=${()=>this._openMoreInfo(e.entityId)}>
+        ${i}
       </button>
-    `:W`<div class="info-box">${e}</div>`:q}_renderBattery(t,e){const i=St(this._config.battery_icon),n=function(t){if(Ct(t))return null;const e=Number(t.state);return Number.isFinite(e)?e:null}(t.stateObj),r=function(t,e){if(!Number.isFinite(e))return!1;const i=String(t?.attributes?.unit_of_measurement??"").trim().toLowerCase();return"%"===i||"percent"===i||""===i&&e>=0&&e<=100}(t.stateObj,n),s=r?Math.min(100,Math.max(0,n)):null,o=null==s?"":function(t,e){return e?"charging":t<=15?"low":t<=30?"medium":"high"}(s,e),a=i||function(t,e){if(!Number.isFinite(t))return e?"mdi:battery-charging":"mdi:battery";if(t<=5)return e?"mdi:battery-charging-outline":"mdi:battery-outline";if(t>=95)return e?"mdi:battery-charging-100":"mdi:battery";const i=Math.max(10,10*Math.round(t/10));return e?`mdi:battery-charging-${i}`:`mdi:battery-${i}`}(n,e),l=r?t.stateObj?.attributes?.unit_of_measurement||"%":t.stateObj?.attributes?.unit_of_measurement||"";return this._renderBox(t,W`
-        <ha-icon class=${o} .icon=${a}></ha-icon>
-        <span class="label">Battery / Fuel</span>
+    `:F`<div class="info-box">${i}</div>`}_renderBattery(t){if(!t.configured)return q;const e=Bt(t.stateObj),i=null==e?null:Math.min(100,Math.max(0,e)),r=null==i?"":function(t){return t<=15?"low":t<=30?"medium":"high"}(i),o=F`
+      <ha-icon class=${r} .icon=${function(t){return Number.isFinite(t)?t<=5?"mdi:battery-outline":t>=95?"mdi:battery":`mdi:battery-${Math.max(10,10*Math.round(t/10))}`:"mdi:battery-unknown"}(e)}></ha-icon>
+      <div class="battery-copy">
+        <span class="label">Battery</span>
         <div class="value-container">
-          <span class="value">${Mt(t.stateObj)}</span>
-          ${l&&!Ct(t.stateObj)?W`<span class="unit">${l}</span>`:q}
+          <span class="value">${null==i?Dt(t.stateObj):kt(i)}</span>
+          ${null==i?q:F`<span class="unit">%</span>`}
         </div>
-        ${null==s?q:W`
+        ${null==i?q:F`
               <div
                 class="progress-bar"
                 role="progressbar"
                 aria-valuemin="0"
                 aria-valuemax="100"
-                aria-valuenow=${s}
-                aria-label="Battery or fuel level"
+                aria-valuenow=${i}
+                aria-label="Battery state of charge"
               >
-                <div class="progress-fill ${o}" style=${ft({width:`${s}%`})}></div>
+                <div class="progress-fill ${r}" style=${ft({width:`${i}%`})}></div>
               </div>
             `}
-      `)}_renderRange(t){const e=St(this._config.range_icon)||"mdi:map-marker-distance",i=Ct(t.stateObj)?"":t.stateObj?.attributes?.unit_of_measurement||"";return this._renderBox(t,W`
-        <ha-icon .icon=${e}></ha-icon>
-        <span class="label">Range</span>
-        <div class="value-container">
-          <span class="value">${Mt(t.stateObj)}</span>
-          ${i?W`<span class="unit">${i}</span>`:q}
-        </div>
-      `)}_renderLocation(t){const e=St(this._config.location_icon)||"mdi:crosshairs-gps";return this._renderBox(t,W`
-        <ha-icon .icon=${e}></ha-icon>
-        <span class="label">Location</span>
-        <div class="value-container">
-          <span class="value location">${function(t){if(!t)return"Not found";const e=String(t.state).trim().toLowerCase();return"home"===e?"Home":"not_home"===e||"not home"===e?"Away":"unavailable"===e?"Unavailable":"unknown"===e||"none"===e||""===e?"Unknown":Ot(t.state)}(t.stateObj)}</span>
-        </div>
-      `)}render(){if(!this.hass||!this._config)return W``;const t=St(this._config.title)||"My Vehicle",e=St(this._config.car_icon)||"mdi:car",i=this._resolve(this._config.battery_entity),n=this._resolve(this._config.range_entity),r=this._resolve(this._config.location_entity),s=this._resolve(this._config.charging_entity),o=kt(s.stateObj),a=this._windowModels(),l=i.configured||n.configured||r.configured;return W`
+      </div>
+    `;return t.stateObj?F`
+      <button class="battery" type="button" @click=${()=>this._openMoreInfo(t.entityId)}>
+        ${o}
+      </button>
+    `:F`<div class="battery">${o}</div>`}render(){if(!this.hass||!this._config)return F``;const t=It(this._config.title)||"My Vehicle",e=Object.fromEntries(mt.map(t=>[t.id,this._panel(t)])),i=Object.fromEntries(yt.map(t=>[t.id,this._panel(t)])),r=this._panel(_t),o=[...Object.values(e).filter(t=>t.open).map(t=>`${t.short} door open`),...Object.values(i).filter(t=>t.open).map(t=>`${t.short} window down`),...r.open?["Boot open"]:[]],n=o.length?o.join(", "):"Everything reported is closed",s=(a=this._config.car_model,Mt[a]||Mt.hatchback);var a;const l=this._resolve(this._config.battery_entity),c=this._distance("mileage_entity","mileage_unit"),h=this._distance("range_entity","range_unit"),d=c.configured||h.configured;return F`
       <ha-card>
         <div class="card-header">
           <div class="header-title">
-            <ha-icon .icon=${e}></ha-icon>
             <span>${t}</span>
           </div>
-          ${s.configured?this._renderChargingIndicator(s.stateObj):q}
         </div>
-        ${function(t,e){const i=Object.fromEntries(t.map(t=>[t.id,t])),n=t.filter(t=>t.open).map(t=>t.label.replace(" window","")),r=n.length<2?n[0]||"":2===n.length?`${n[0]} and ${n[1]}`:`${n.slice(0,-1).join(", ")}, and ${n[n.length-1]}`,s=n.length?`${r} ${1===n.length?"is":"are"} down`:"All configured windows are closed";return W`
-    <figure class="plan">
-      <svg viewBox="0 0 220 400" role="img" aria-label="Top view of the vehicle, front at the top. ${s}">
-        <g class="wheel">
-          <rect x="6" y="112" width="30" height="64" rx="14"></rect>
-          <rect class="rim" x="13" y="126" width="16" height="36" rx="6"></rect>
-        </g>
-        <g class="wheel">
-          <rect x="184" y="112" width="30" height="64" rx="14"></rect>
-          <rect class="rim" x="191" y="126" width="16" height="36" rx="6"></rect>
-        </g>
-        <g class="wheel">
-          <rect x="8" y="248" width="30" height="64" rx="14"></rect>
-          <rect class="rim" x="15" y="262" width="16" height="36" rx="6"></rect>
-        </g>
-        <g class="wheel">
-          <rect x="182" y="248" width="30" height="64" rx="14"></rect>
-          <rect class="rim" x="189" y="262" width="16" height="36" rx="6"></rect>
-        </g>
-
-        <path
-          class="body"
-          d="M78 30c18-14 46-14 64 0l16 26c24 16 36 42 34 74l-4 150c-2 40-14 74-34 94-16 14-76 14-92 0-20-20-32-54-34-94l-4-150c-2-32 10-58 34-74z"
-        ></path>
-        <path class="hood" d="M86 58h48l10 36H76z"></path>
-        <ellipse class="badge" cx="110" cy="74" rx="7" ry="7"></ellipse>
-        <path class="headlight" d="M62 58h16l6 16H58z"></path>
-        <path class="headlight" d="M158 58h-16l-6 16h26z"></path>
-        <path class="glass" d="M72 108h76l12 46H60z"></path>
-        <path class="roof" d="M90 164h40v132H90z"></path>
-        <path class="glass" d="M76 304h68l-8 34H84z"></path>
-        <path class="taillight" d="M58 352h22l4 10H62z"></path>
-        <path class="taillight" d="M162 352h-22l-4 10h22z"></path>
-        <ellipse class="mirror" cx="18" cy="132" rx="14" ry="9"></ellipse>
-        <ellipse class="mirror" cx="202" cy="132" rx="14" ry="9"></ellipse>
-        <path class="antenna" d="M146 214h10v8h-10z"></path>
-
-        ${bt(i["front-left"],"50,158 86,154 86,214 48,210",e)}
-        ${bt(i["front-right"],"170,158 134,154 134,214 172,210",e)}
-        ${bt(i["rear-left"],"48,224 86,220 86,300 46,296",e)}
-        ${bt(i["rear-right"],"172,224 134,220 134,300 174,296",e)}
-      </svg>
-      ${n.length?W`<figcaption class="window-alert">${s}</figcaption>`:W`<figcaption class="window-key">Front is at the top. Open windows turn red.</figcaption>`}
-    </figure>
-  `}(a,t=>this._openMoreInfo(t))}
-        ${l?W`
-              <div class="grid-container">
-                ${this._renderBattery(i,o)}
-                ${this._renderRange(n)}
-                ${this._renderLocation(r)}
-              </div>
-            `:W`<div class="empty">Choose a battery, range, or location entity in the card options.</div>`}
+        <figure class="plan">
+          ${s.render({doors:e,windows:i,boot:r,summary:n,onSelect:t=>this._openMoreInfo(t)})}
+          <figcaption class=${o.length?"plan-alert":"plan-key"}>
+            ${o.length?n:"Front is at the top. Open windows turn red."}
+          </figcaption>
+        </figure>
+        ${this._renderBattery(l)}
+        ${d?F`<div class="grid-container">${this._renderDistance("Mileage",c)}${this._renderDistance("Range",h)}</div>`:q}
       </ha-card>
-    `}}customElements.get("car-info-card")||customElements.define("car-info-card",Pt),window.customCards=window.customCards||[],window.customCards.some(t=>"car-info-card"===t.type)||window.customCards.push({type:"car-info-card",name:"Car Info Card",preview:!0,description:"Displays a vehicle plan, window status, battery or fuel level, range, location, and charging.",documentationURL:"https://github.com/davies1995/HA-Car-Card"});
+    `}}customElements.get("car-info-card")||customElements.define("car-info-card",Ft),window.customCards=window.customCards||[],window.customCards.some(t=>"car-info-card"===t.type)||window.customCards.push({type:"car-info-card",name:"Car Info Card",preview:!0,description:"Top-down vehicle plan with doors, windows, boot, battery, mileage, and range.",documentationURL:"https://github.com/davies1995/HA-Car-Card"});

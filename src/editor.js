@@ -1,71 +1,111 @@
 import { LitElement, html, css } from "lit";
+import { DOOR_DEFS, WINDOW_DEFS, BOOT_DEF, VEHICLE_OPTIONS, UNIT_OPTIONS } from "./vehicle-config.js";
+
+const OPEN_DOMAINS = ["binary_sensor", "sensor", "cover"];
+
+function entityField(name, label, helper) {
+  return {
+    name,
+    label,
+    helper,
+    selector: { entity: { domain: OPEN_DOMAINS } },
+  };
+}
+
+function unitField(name, label, helper) {
+  return {
+    name,
+    label,
+    helper,
+    selector: {
+      select: {
+        mode: "dropdown",
+        options: UNIT_OPTIONS,
+      },
+    },
+  };
+}
+
+function section(title, schema) {
+  return {
+    type: "expandable",
+    name: "",
+    flatten: true,
+    title,
+    schema,
+  };
+}
 
 const SCHEMA = [
-  { name: "title", label: "Card title", selector: { text: {} } },
-  { name: "car_icon", label: "Header icon", selector: { icon: {} } },
-  {
-    name: "battery_entity",
-    label: "Battery / fuel level",
-    selector: { entity: { domain: ["sensor"] } },
-  },
-  {
-    name: "battery_icon",
-    label: "Battery / fuel icon",
-    selector: { icon: {} },
-  },
-  {
-    name: "range_entity",
-    label: "Remaining range",
-    selector: { entity: { domain: ["sensor"] } },
-  },
-  { name: "range_icon", label: "Range icon", selector: { icon: {} } },
-  {
-    name: "location_entity",
-    label: "Location",
-    selector: { entity: { domain: ["device_tracker", "person", "sensor"] } },
-  },
-  { name: "location_icon", label: "Location icon", selector: { icon: {} } },
-  {
-    name: "charging_entity",
-    label: "Charging status",
-    selector: { entity: { domain: ["binary_sensor", "sensor"] } },
-  },
-  { name: "charging_icon", label: "Charging icon", selector: { icon: {} } },
-  {
-    name: "front_left_window_entity",
-    label: "Front left window",
-    selector: { entity: { domain: ["binary_sensor", "sensor", "cover"] } },
-  },
-  {
-    name: "front_right_window_entity",
-    label: "Front right window",
-    selector: { entity: { domain: ["binary_sensor", "sensor", "cover"] } },
-  },
-  {
-    name: "rear_left_window_entity",
-    label: "Rear left window",
-    selector: { entity: { domain: ["binary_sensor", "sensor", "cover"] } },
-  },
-  {
-    name: "rear_right_window_entity",
-    label: "Rear right window",
-    selector: { entity: { domain: ["binary_sensor", "sensor", "cover"] } },
-  },
+  section("Vehicle", [
+    { name: "title", label: "Card title", selector: { text: {} } },
+    {
+      name: "car_model",
+      label: "Vehicle plan",
+      helper: "Top-down view drawn on the card. More vehicles can be added here later.",
+      selector: {
+        select: {
+          mode: "dropdown",
+          options: VEHICLE_OPTIONS,
+        },
+      },
+    },
+  ]),
+  section(
+    "Doors",
+    DOOR_DEFS.map((door) =>
+      entityField(
+        door.key,
+        door.label,
+        "On or open swings this door out. Left and right are the vehicle's own sides, with the front of the plan at the top."
+      )
+    )
+  ),
+  section(
+    "Windows",
+    WINDOW_DEFS.map((windowDef) =>
+      entityField(
+        windowDef.key,
+        windowDef.label,
+        "On, open, down, or a position above 0 turns this window red, with the door open or shut."
+      )
+    )
+  ),
+  section("Boot", [
+    entityField(BOOT_DEF.key, BOOT_DEF.label, "On or open highlights the boot and shows it ajar."),
+  ]),
+  section("Battery", [
+    {
+      name: "battery_entity",
+      label: "State of charge",
+      helper: "Battery percentage. The icon changes with the level.",
+      selector: { entity: { domain: ["sensor"] } },
+    },
+  ]),
+  section("Mileage and range", [
+    {
+      name: "mileage_entity",
+      label: "Mileage",
+      helper: "Odometer entity.",
+      selector: { entity: { domain: ["sensor"] } },
+    },
+    unitField("mileage_unit", "Mileage entity unit", "Unit the mileage entity reports."),
+    {
+      name: "range_entity",
+      label: "Range",
+      helper: "Estimated range remaining.",
+      selector: { entity: { domain: ["sensor"] } },
+    },
+    unitField("range_unit", "Range entity unit", "Unit the range entity reports."),
+    unitField("display_unit", "Display unit", "Mileage and range are converted into this unit."),
+  ]),
 ];
 
-const HELPERS = {
-  battery_entity: "Numeric level. A progress bar is shown when the value is a percentage.",
-  battery_icon: "Optional. Leave empty for an automatic battery or charging icon.",
-  range_entity: "Remaining range sensor. The entity's own unit is displayed.",
-  location_entity: "Device tracker, person, or location sensor. home and not_home are shown as Home and Away.",
-  charging_entity: "On, charging, plugged in, or connected is treated as charging.",
-  charging_icon: "Optional icon shown while the vehicle is charging.",
-  front_left_window_entity:
-    "Vehicle's front left, shown on the left of the plan. On, open, or a position above 0 turns that window red.",
-  front_right_window_entity: "Vehicle's front right. On, open, or a position above 0 turns that window red.",
-  rear_left_window_entity: "Vehicle's rear left. On, open, or a position above 0 turns that window red.",
-  rear_right_window_entity: "Vehicle's rear right. On, open, or a position above 0 turns that window red.",
-};
+const HELPERS = Object.fromEntries(
+  SCHEMA.flatMap((group) => group.schema)
+    .filter((field) => field.helper)
+    .map((field) => [field.name, field.helper])
+);
 
 export class CarInfoCardEditor extends LitElement {
   static get properties() {

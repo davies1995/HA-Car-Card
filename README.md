@@ -1,19 +1,17 @@
 # Car Info Card
 
-A Home Assistant Lovelace card for vehicle telemetry. It shows a top-down plan of the car, battery or fuel level with a progress bar, remaining range, location, and whether the vehicle is charging. Side windows turn red when their entity says they are down.
+A Home Assistant Lovelace card that shows a top-down plan of a vehicle. Doors swing open, windows turn red when they are down, and the boot is highlighted when it is open. The card also shows battery state of charge, mileage, and range, and can convert mileage and range between miles and kilometres.
 
-The card is a single JavaScript module, registered as `car-info-card`, and can be installed with HACS or added as a dashboard resource.
+The first vehicle plan is a hatchback. The vehicle list is a setting, so more plans can be added later.
 
 ## Features
 
-- Top-down plan of the vehicle, with the front at the top
-- Side windows highlighted red when they are open or down
-- Battery or fuel percentage with a progress bar that changes color as the level drops
-- Charging status with a charging icon and label
-- Remaining range, using the sensor's own unit
-- Location, with `home` and `not_home` shown as Home and Away
-- Visual configuration in the dashboard editor through Home Assistant's form selectors
-- Theme colors from Home Assistant variables such as `--primary-color` and `--secondary-background-color`
+- Configurable top-down plan, with the front at the top
+- Doors drawn open when their entity is on or open
+- Side windows highlighted red when down, whether the door is open or shut
+- Boot highlighted when open
+- Battery percentage with an icon that changes with the level
+- Mileage and range, each with its own source unit, converted into the display unit you choose
 
 ## Installation
 
@@ -22,61 +20,63 @@ The card is a single JavaScript module, registered as `car-info-card`, and can b
 1. Open HACS, then Frontend (also shown as Dashboard).
 2. Open the menu and choose **Custom repositories**.
 3. Add `https://github.com/davies1995/HA-Car-Card` and select category **Lovelace** (Dashboard).
-4. Install **Car Info Card** from the list.
+4. Install **Car Info Card**.
 5. Reload the browser.
 
-HACS downloads `car-info-card.js` from the latest GitHub release. Publishing a release runs the included workflow, which builds that file and attaches it for you.
+HACS downloads `car-info-card.js` from the latest GitHub release. Publishing a release runs the included workflow, which builds that file and attaches it.
 
 ### Manual
 
 1. Copy `dist/car-info-card.js` to `config/www/community/HA-Car-Card/car-info-card.js`.
-2. In Home Assistant, go to **Settings → Dashboards → Resources → Add resource**.
-3. URL: `/local/community/HA-Car-Card/car-info-card.js`
-4. Resource type: **JavaScript module**.
-5. Reload the browser.
+2. In **Settings → Dashboards → Resources → Add resource**, use `/local/community/HA-Car-Card/car-info-card.js` as a JavaScript module.
+3. Reload the browser.
 
 ## Usage
 
-Add a card and search for **Car Info Card**, or paste this into the dashboard YAML:
+Add **Car Info Card** from the card picker. The editor is grouped into Vehicle, Doors, Windows, Boot, Battery, and Mileage and range.
 
 ```yaml
 type: custom:car-info-card
 title: My Vehicle
-car_icon: mdi:car-electric
-battery_entity: sensor.my_car_battery
-range_entity: sensor.my_car_range
-location_entity: device_tracker.my_car
-charging_entity: binary_sensor.my_car_charging
+car_model: hatchback
+front_left_door_entity: binary_sensor.my_car_front_left_door
+front_right_door_entity: binary_sensor.my_car_front_right_door
+rear_left_door_entity: binary_sensor.my_car_rear_left_door
+rear_right_door_entity: binary_sensor.my_car_rear_right_door
 front_left_window_entity: binary_sensor.my_car_front_left_window
 front_right_window_entity: binary_sensor.my_car_front_right_window
 rear_left_window_entity: binary_sensor.my_car_rear_left_window
 rear_right_window_entity: binary_sensor.my_car_rear_right_window
+boot_entity: binary_sensor.my_car_boot
+battery_entity: sensor.my_car_battery
+mileage_entity: sensor.my_car_odometer
+mileage_unit: mi
+range_entity: sensor.my_car_range
+range_unit: km
+display_unit: mi
 ```
 
-Left and right are the vehicle's own left and right, with the front of the plan at the top of the card. On a right-hand-drive car, the front left window is the passenger side.
+Left and right are the vehicle's own left and right. On a right-hand-drive car, the front left door is the passenger side.
 
-A window is shown as down when its entity is `on`, `open`, `down`, or any number above 0. `off`, `closed`, `up`, and `0` stay the normal glass color. Click a window or a value to open the Home Assistant more-info dialog for that entity.
+A door, window, or the boot counts as open when the entity is `on`, `open`, `down`, or any number above 0. `off`, `closed`, `up`, and `0` stay closed. Windows are drawn red in both the open-door and shut-door positions.
 
-### Options
+`mileage_unit` and `range_unit` are the units those entities report. `display_unit` is what the card shows. If they differ, the card converts the value. One mile is treated as 1.609344 kilometres.
+
+## Options
 
 | Option | Description |
 | --- | --- |
 | `title` | Card title. Defaults to `My Vehicle`. |
-| `car_icon` | Header icon. Defaults to `mdi:car`. |
-| `battery_entity` | Battery or fuel level sensor. A bar is drawn when the state is a percentage from 0 to 100. |
-| `battery_icon` | Optional icon. Leave unset to use an automatic battery or charging icon. |
-| `range_entity` | Remaining range sensor. |
-| `range_icon` | Optional icon. Defaults to `mdi:map-marker-distance`. |
-| `location_entity` | `device_tracker`, `person`, or location sensor. |
-| `location_icon` | Optional icon. Defaults to `mdi:crosshairs-gps`. |
-| `charging_entity` | `binary_sensor` or `sensor`. `on`, `charging`, `plugged_in`, and `connected` count as charging. |
-| `charging_icon` | Optional icon used while charging. Defaults to `mdi:ev-station`. |
-| `front_left_window_entity` | Front left window. `binary_sensor`, `sensor`, or `cover`. Open states are drawn in red. |
-| `front_right_window_entity` | Front right window. |
-| `rear_left_window_entity` | Rear left window. |
-| `rear_right_window_entity` | Rear right window. |
-
-Charging is also detected when the charging entity has `attributes.charging: true`.
+| `car_model` | Plan to draw. Currently `hatchback`. |
+| `front_left_door_entity` | Front left door. Also `front_right`, `rear_left`, and `rear_right`. |
+| `front_left_window_entity` | Front left window. Also the other three side windows. |
+| `boot_entity` | Boot or tailgate. |
+| `battery_entity` | Battery state of charge, usually a percentage. |
+| `mileage_entity` | Odometer. |
+| `mileage_unit` | `mi` or `km`, the unit that entity reports. |
+| `range_entity` | Remaining range. |
+| `range_unit` | `mi` or `km`, the unit that entity reports. |
+| `display_unit` | `mi` or `km`, the unit shown on the card. |
 
 ## Development
 
@@ -87,12 +87,8 @@ npm install
 npm run build
 ```
 
-The bundle is written to `dist/car-info-card.js`. Use `npm run watch` while editing.
+The bundle is written to `dist/car-info-card.js`. To add another vehicle, add a renderer next to `src/vehicles/hatchback.js` and register it in `src/vehicles/index.js` and `VEHICLE_OPTIONS`.
 
 ## Releasing
 
-1. Open **Releases → Draft a new release** on GitHub.
-2. Create a tag such as `v1.0.0` and publish the release.
-3. The **Release Custom Card** workflow builds the card and attaches `dist/car-info-card.js` to that release.
-
-HACS uses the attached `car-info-card.js` file named in `hacs.json`.
+Publish a GitHub release. The **Release Custom Card** workflow builds the card and attaches `dist/car-info-card.js`.
