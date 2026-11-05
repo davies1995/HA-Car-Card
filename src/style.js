@@ -268,6 +268,17 @@ export const styles = css`
     top: 91%;
   }
 
+  .plan-canvas.bmw-3-series.has-plug {
+    padding-right: 0;
+    padding-left: 34px;
+  }
+
+  .plan-canvas.bmw-3-series .charge-plug {
+    right: auto;
+    left: 2px;
+    top: 28%;
+  }
+
   .plan-canvas.hatchback .charge-plug {
     top: 66%;
   }
@@ -287,7 +298,8 @@ export const styles = css`
   }
 
   .plan-canvas > svg.id3,
-  .plan-canvas > svg.tesla {
+  .plan-canvas > svg.tesla,
+  .plan-canvas > svg.bmw {
     width: min(100%, 250px);
   }
 
@@ -302,7 +314,8 @@ export const styles = css`
   }
 
   .id3-zone,
-  .tesla-zone {
+  .tesla-zone,
+  .bmw-zone {
     fill: transparent;
     stroke: none;
   }
@@ -310,25 +323,30 @@ export const styles = css`
   .id3-zone.door-zone.is-open,
   .id3-zone.window-zone.is-open,
   .tesla-zone.door-zone.is-open,
-  .tesla-zone.window-zone.is-open {
+  .tesla-zone.window-zone.is-open,
+  .bmw-zone.door-zone.is-open,
+  .bmw-zone.window-zone.is-open {
     fill: var(--error-color, #e53935);
     fill-opacity: 0.62;
   }
 
   .id3-zone.boot-zone.is-open,
-  .tesla-zone.boot-zone.is-open {
+  .tesla-zone.boot-zone.is-open,
+  .bmw-zone.boot-zone.is-open {
     fill: var(--warning-color, #fb8c00);
     fill-opacity: 0.5;
   }
 
   .id3-zone.light-zone.is-open,
-  .tesla-zone.light-zone.is-open {
+  .tesla-zone.light-zone.is-open,
+  .bmw-zone.light-zone.is-open {
     fill: #fff3b0;
     fill-opacity: 0.92;
   }
 
   .id3-zone.interactive,
-  .tesla-zone.interactive {
+  .tesla-zone.interactive,
+  .bmw-zone.interactive {
     cursor: pointer;
   }
 

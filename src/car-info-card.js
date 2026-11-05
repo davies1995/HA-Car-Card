@@ -20,7 +20,7 @@ import { getVehicle } from "./vehicles/index.js";
 import { padlockIcon, type2Icon } from "./icons.js";
 import "./editor.js";
 
-const VERSION = "1.6.0";
+const VERSION = "1.7.0";
 const UNAVAILABLE = new Set(["unavailable", "unknown", "none", ""]);
 
 console.info(
@@ -338,7 +338,7 @@ if (!window.customCards.some((card) => card.type === "car-info-card")) {
     name: "Car Info Card",
     preview: true,
     description:
-      "Top-down vehicle plan, including a VW ID.3 and Tesla Model 3, with doors, windows, boot, headlights, charge cable, lock, battery, mileage, and range.",
+      "Top-down vehicle plan, including a VW ID.3, Tesla Model 3, and BMW 3 Series, with doors, windows, boot, headlights, charge cable, lock, battery, mileage, and range.",
     documentationURL: "https://github.com/davies1995/HA-Car-Card",
   });
 }
