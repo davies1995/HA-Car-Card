@@ -1,6 +1,6 @@
 {
   "name": "ha-car-info-card",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Home Assistant card with a configurable vehicle plan, doors, windows, boot, battery, mileage, and range",
   "main": "dist/car-info-card.js",
   "module": "dist/car-info-card.js",
