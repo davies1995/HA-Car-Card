@@ -14,7 +14,8 @@ Choose the plan in the card settings. Hatchback is the drawn plan. VW ID.3, Tesl
 - Headlights turn pale yellow when their entity is on
 - Type 2 connector beside the charge port when the cable is connected: green while charging, red when it is not
 - Padlock at the top centre: green and open when unlocked, red when locked
-- Battery percentage with an icon that changes with the level
+- Vehicle type: ICE shows fuel tank level, EV shows battery and charging, Hybrid shows both
+- Battery or fuel percentage with a level bar
 - Mileage and range, each with its own source unit, converted into the display unit you choose
 
 ## Installation
@@ -37,12 +38,13 @@ HACS downloads `car-info-card.js` from the latest GitHub release. Publishing a r
 
 ## Usage
 
-Add **Car Info Card** from the card picker. The editor is grouped into Vehicle, Doors, Windows, Boot, Headlights, Charging, Lock, Battery, and Mileage and range.
+Add **Car Info Card** from the card picker. Choose ICE, EV, or Hybrid under Vehicle type. ICE shows the fuel tank and hides charging. EV shows the battery and charging. Hybrid shows both. The other sections are Doors, Windows, Boot, Headlights, Lock, and Mileage and range.
 
 ```yaml
 type: custom:car-info-card
 title: My Vehicle
 car_model: vw-id3
+vehicle_type: ev
 white_background: true
 front_left_door_entity: binary_sensor.my_car_front_left_door
 front_right_door_entity: binary_sensor.my_car_front_right_door
@@ -69,7 +71,7 @@ Left and right are the vehicle's own left and right. On a right-hand-drive car, 
 
 A door, window, or the boot counts as open when the entity is `on`, `open`, `down`, or any number above 0. `off`, `closed`, `up`, and `0` stay closed. Windows are drawn red in both the open-door and shut-door positions.
 
-The charge connector is shown only while the cable entity is connected. It is green when the charging sensor reports `charging`, and red when that sensor reports `not charging`. The padlock is green and open for `unlocked`, and red for `locked`.
+The charge connector is shown for an EV or hybrid while the cable entity is connected. It is green when the charging sensor reports `charging`, and red when that sensor reports `not charging`. An ICE vehicle hides charging and shows fuel level instead of battery state of charge. The padlock is green and open for `unlocked`, and red for `locked`.
 
 `mileage_unit` and `range_unit` are the units those entities report. `display_unit` is what the card shows. If they differ, the card converts the value. One mile is treated as 1.609344 kilometres.
 
@@ -78,16 +80,18 @@ The charge connector is shown only while the cable entity is connected. It is gr
 | Option | Description |
 | --- | --- |
 | `title` | Card title. Defaults to `My Vehicle`. |
+| `vehicle_type` | `ice`, `ev`, or `hybrid`. Defaults to `ev`. |
 | `car_model` | Plan to draw. `hatchback`, `vw-id3`, `tesla-model-3`, or `bmw-3-series`. |
 | `front_left_door_entity` | Front left door. Also `front_right`, `rear_left`, and `rear_right`. |
 | `front_left_window_entity` | Front left window. Also the other three side windows. |
 | `boot_entity` | Boot or tailgate. |
 | `headlights_entity` | Turns both headlights pale yellow when on. |
 | `white_background` | White fill behind the plan. Useful for the VW ID.3 line drawing. |
-| `charge_cable_entity` | Shows a Type 2 connector beside the charge port when connected, on, or plugged in. |
-| `charging_entity` | Sensor reporting `charging` or `not charging`. The connector is green while charging and red when it is not. |
+| `charge_cable_entity` | EV and hybrid only. Shows a Type 2 connector beside the charge port when connected, on, or plugged in. |
+| `charging_entity` | EV and hybrid only. Sensor reporting `charging` or `not charging`. The connector is green while charging and red when it is not. |
+| `fuel_entity` | ICE and hybrid only. Fuel tank level as a percentage. |
 | `lock_entity` | Sensor reporting `locked` or `unlocked`. Green open padlock when unlocked, red padlock when locked. |
-| `battery_entity` | Battery state of charge, usually a percentage. |
+| `battery_entity` | EV and hybrid only. Battery state of charge, usually a percentage. |
 | `mileage_entity` | Odometer. |
 | `mileage_unit` | `mi` or `km`, the unit that entity reports. |
 | `range_entity` | Remaining range. |

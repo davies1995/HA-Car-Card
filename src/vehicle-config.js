@@ -54,6 +54,30 @@ export const UNIT_OPTIONS = [
   { value: "km", label: "Kilometres" },
 ];
 
+export const POWERTRAIN_OPTIONS = [
+  { value: "ice", label: "ICE" },
+  { value: "ev", label: "EV" },
+  { value: "hybrid", label: "Hybrid" },
+];
+
+export function powertrain(value) {
+  const type = String(value ?? "").trim().toLowerCase();
+  if (type === "ice" || type === "hybrid" || type === "ev") return type;
+  return "ev";
+}
+
+export function showsFuel(type) {
+  return type === "ice" || type === "hybrid";
+}
+
+export function showsBattery(type) {
+  return type === "ev" || type === "hybrid";
+}
+
+export function showsCharging(type) {
+  return type === "ev" || type === "hybrid";
+}
+
 const OPEN_STATES = new Set([
   "on",
   "open",

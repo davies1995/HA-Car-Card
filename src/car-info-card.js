@@ -13,6 +13,10 @@ import {
   isOpen,
   lockStatus,
   normalizeUnit,
+  powertrain,
+  showsBattery,
+  showsCharging,
+  showsFuel,
   unitFromState,
   unitLabel,
 } from "./vehicle-config.js";
@@ -20,7 +24,7 @@ import { getVehicle } from "./vehicles/index.js";
 import { padlockIcon, type2Icon } from "./icons.js";
 import "./editor.js";
 
-const VERSION = "1.7.0";
+const VERSION = "1.8.0";
 const UNAVAILABLE = new Set(["unavailable", "unknown", "none", ""]);
 
 console.info(
@@ -91,11 +95,13 @@ class CarInfoCard extends LitElement {
     const config = {
       title: "My Vehicle",
       car_model: "hatchback",
+      vehicle_type: "ev",
       mileage_unit: "mi",
       range_unit: "mi",
       display_unit: "mi",
     };
     const battery = find(/^sensor\..*(battery|soc)/i);
+    const fuel = find(/^sensor\..*(fuel|tank|petrol|diesel)/i);
     const mileage = find(/^sensor\..*(odometer|mileage|total_distance)/i);
     const range = find(/^sensor\..*range/i);
     const boot = find(/(boot|trunk|tailgate)/i);
@@ -104,6 +110,7 @@ class CarInfoCard extends LitElement {
     const charging = find(/charging/i);
     const lock = find(/(^|[^a-z])lock/i);
     if (battery) config.battery_entity = battery;
+    if (fuel) config.fuel_entity = fuel;
     if (mileage) config.mileage_entity = mileage;
     if (range && range !== mileage) config.range_entity = range;
     if (boot) config.boot_entity = boot;
@@ -127,6 +134,7 @@ class CarInfoCard extends LitElement {
     this._config = {
       title: "My Vehicle",
       car_model: "hatchback",
+      vehicle_type: "ev",
       mileage_unit: "mi",
       range_unit: "mi",
       display_unit: "mi",
@@ -197,17 +205,18 @@ class CarInfoCard extends LitElement {
     `;
   }
 
-  _renderBattery(battery) {
-    if (!battery.configured) return nothing;
-    const level = numericState(battery.stateObj);
+  _renderLevel(label, reading, iconFor, aria) {
+    if (!reading.configured) return nothing;
+    const level = numericState(reading.stateObj);
     const percent = level == null ? null : Math.min(100, Math.max(0, level));
     const tone = percent == null ? "" : levelTone(percent);
+    const icon = typeof iconFor === "function" ? iconFor(level) : iconFor;
     const content = html`
-      <ha-icon class=${tone} .icon=${batteryIcon(level)}></ha-icon>
+      <ha-icon class=${tone} .icon=${icon}></ha-icon>
       <div class="battery-copy">
-        <span class="label">Battery</span>
+        <span class="label">${label}</span>
         <div class="value-container">
-          <span class="value">${percent == null ? displayValue(battery.stateObj) : formatDistance(percent)}</span>
+          <span class="value">${percent == null ? displayValue(reading.stateObj) : formatDistance(percent)}</span>
           ${percent == null ? nothing : html`<span class="unit">%</span>`}
         </div>
         ${percent == null
@@ -219,16 +228,16 @@ class CarInfoCard extends LitElement {
                 aria-valuemin="0"
                 aria-valuemax="100"
                 aria-valuenow=${percent}
-                aria-label="Battery state of charge"
+                aria-label=${aria}
               >
                 <div class="progress-fill ${tone}" style=${styleMap({ width: `${percent}%` })}></div>
               </div>
             `}
       </div>
     `;
-    if (!battery.stateObj) return html`<div class="battery">${content}</div>`;
+    if (!reading.stateObj) return html`<div class="battery">${content}</div>`;
     return html`
-      <button class="battery" type="button" @click=${() => this._openMoreInfo(battery.entityId)}>
+      <button class="battery" type="button" @click=${() => this._openMoreInfo(reading.entityId)}>
         ${content}
       </button>
     `;
@@ -242,10 +251,12 @@ class CarInfoCard extends LitElement {
     const windows = Object.fromEntries(WINDOW_DEFS.map((definition) => [definition.id, this._panel(definition)]));
     const boot = this._panel(BOOT_DEF);
     const headlights = this._panel(HEADLIGHT_DEF);
+    const type = powertrain(this._config.vehicle_type);
+    const chargeable = showsCharging(type);
     const cable = this._resolve(this._config.charge_cable_entity);
-    const cableConnected = cable.configured && isCableConnected(cable.stateObj);
+    const cableConnected = chargeable && cable.configured && isCableConnected(cable.stateObj);
     const charging = this._resolve(this._config.charging_entity);
-    const chargingNow = charging.configured ? isCharging(charging.stateObj) : null;
+    const chargingNow = chargeable && charging.configured ? isCharging(charging.stateObj) : null;
     const lock = this._resolve(this._config.lock_entity);
     const locked = lock.configured ? lockStatus(lock.stateObj) : "";
     const alerts = [
@@ -268,6 +279,7 @@ class CarInfoCard extends LitElement {
     const plugEntity = charging.stateObj ? charging.entityId : cable.entityId;
     const vehicle = getVehicle(this._config.car_model);
     const battery = this._resolve(this._config.battery_entity);
+    const fuel = this._resolve(this._config.fuel_entity);
     const mileage = this._distance("mileage_entity", "mileage_unit");
     const range = this._distance("range_entity", "range_unit");
     const hasDistance = mileage.configured || range.configured;
@@ -318,7 +330,8 @@ class CarInfoCard extends LitElement {
             ${alerts.length ? alerts.join(", ") : "Front is at the top. Open windows turn red."}
           </figcaption>
         </figure>
-        ${this._renderBattery(battery)}
+        ${showsFuel(type) ? this._renderLevel("Fuel", fuel, "mdi:gas-station", "Fuel tank level") : nothing}
+        ${showsBattery(type) ? this._renderLevel("Battery", battery, batteryIcon, "Battery state of charge") : nothing}
         ${hasDistance
           ? html`<div class="grid-container">${this._renderDistance("Mileage", mileage)}${this._renderDistance("Range", range)}</div>`
           : nothing}
@@ -338,7 +351,7 @@ if (!window.customCards.some((card) => card.type === "car-info-card")) {
     name: "Car Info Card",
     preview: true,
     description:
-      "Top-down vehicle plan, including a VW ID.3, Tesla Model 3, and BMW 3 Series, with doors, windows, boot, headlights, charge cable, lock, battery, mileage, and range.",
+      "Top-down vehicle plan for ICE, EV, and hybrid vehicles, including a VW ID.3, Tesla Model 3, and BMW 3 Series.",
     documentationURL: "https://github.com/davies1995/HA-Car-Card",
   });
 }
