@@ -1,3 +1,4 @@
+import { renderBmw3Series } from "./bmw-3-series.js";
 import { renderHatchback } from "./hatchback.js";
 import { renderTeslaModel3 } from "./tesla-model-3.js";
 import { renderVwId3 } from "./vw-id3.js";
@@ -17,6 +18,11 @@ const VEHICLES = {
     id: "tesla-model-3",
     label: "Tesla Model 3",
     render: renderTeslaModel3,
+  },
+  "bmw-3-series": {
+    id: "bmw-3-series",
+    label: "BMW 3 Series",
+    render: renderBmw3Series,
   },
 };
 
