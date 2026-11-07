@@ -52,43 +52,54 @@ function section(title, schema) {
   };
 }
 
-const VEHICLE_SECTION = section("Vehicle", [
-  { name: "title", label: "Card title", selector: { text: {} } },
-  {
-    name: "vehicle_type",
-    label: "Vehicle type",
-    helper: "ICE shows the fuel tank and hides charging. EV shows the battery and charging. Hybrid shows both.",
-    selector: {
-      select: {
-        mode: "dropdown",
-        options: POWERTRAIN_OPTIONS,
+function vehicleSection(transparent) {
+  const fields = [
+    { name: "title", label: "Card title", selector: { text: {} } },
+    {
+      name: "vehicle_type",
+      label: "Vehicle type",
+      helper: "ICE shows the fuel tank and hides charging. EV shows the battery and charging. Hybrid shows both.",
+      selector: {
+        select: {
+          mode: "dropdown",
+          options: POWERTRAIN_OPTIONS,
+        },
       },
     },
-  },
-  {
-    name: "car_model",
-    label: "Vehicle plan",
-    helper: "Top-down view drawn on the card. Choose VW ID.3, Tesla Model 3, or BMW 3 Series for those plans. More vehicles can be added here later.",
-    selector: {
-      select: {
-        mode: "dropdown",
-        options: VEHICLE_OPTIONS,
+    {
+      name: "car_model",
+      label: "Vehicle plan",
+      helper: "Top-down view drawn on the card. Choose VW ID.3, Tesla Model 3, or BMW 3 Series for those plans. More vehicles can be added here later.",
+      selector: {
+        select: {
+          mode: "dropdown",
+          options: VEHICLE_OPTIONS,
+        },
       },
     },
-  },
-  {
-    name: "line_color",
-    label: "Line colour",
-    helper: "Colour of the car outline. Leave empty to keep the original black lines.",
-    selector: { color_rgb: {} },
-  },
-  {
-    name: "background_color",
-    label: "Background colour",
-    helper: "Fill behind the car. Leave empty for none. A card that already has the white background keeps it until a colour is chosen here.",
-    selector: { color_rgb: {} },
-  },
-]);
+    {
+      name: "line_color",
+      label: "Line colour",
+      helper: "Colour of the car outline. Leave empty to keep the original black lines.",
+      selector: { color_rgb: {} },
+    },
+    {
+      name: "background_transparent",
+      label: "Transparent background",
+      helper: "No fill behind the car, so the card background shows through. This overrides the background colour.",
+      selector: { boolean: {} },
+    },
+  ];
+  if (!transparent) {
+    fields.push({
+      name: "background_color",
+      label: "Background colour",
+      helper: "Fill behind the car. Leave empty for none. A card that already has the white background keeps it until a colour is chosen here.",
+      selector: { color_rgb: {} },
+    });
+  }
+  return section("Vehicle", fields);
+}
 
 function rangeHelper(type) {
   if (type === "ice") return "Estimated range from how much fuel is left.";
@@ -96,9 +107,9 @@ function rangeHelper(type) {
   return "Estimated range from the battery.";
 }
 
-function schemaFor(type) {
+function schemaFor(type, transparent) {
   const groups = [
-    VEHICLE_SECTION,
+    vehicleSection(transparent),
     section(
       "Doors",
       DOOR_DEFS.map((door) =>
@@ -140,11 +151,13 @@ function schemaFor(type) {
   }
   groups.push(
     section("Lock", [
-      entityField(
-        LOCK_DEF.key,
-        "Lock",
-        'Sensor that reports "locked" or "unlocked". A red open padlock means unlocked, and a green closed padlock means locked.'
-      ),
+      {
+        name: LOCK_DEF.key,
+        label: "Lock",
+        helper:
+          "Not case sensitive. Locked and unlocked are recognised in any case. A binary sensor that is on counts as locked, unless it is a lock entity, where on means unlocked. The padlock is red and open when unlocked, and green and closed when locked.",
+        selector: { entity: { domain: ["binary_sensor", "sensor", "lock"] } },
+      },
     ])
   );
   if (showsFuel(type)) {
@@ -193,7 +206,7 @@ function schemaFor(type) {
   return groups;
 }
 
-const SCHEMA = schemaFor("ev");
+const SCHEMA = schemaFor("ev", false);
 
 const HELPERS = Object.fromEntries(
   SCHEMA.flatMap((group) => group.schema)
@@ -249,14 +262,17 @@ export class CarInfoCardEditor extends LitElement {
     }
 
     const data = { vehicle_type: "ev", ...this._config };
-    if (!cssColor(data.background_color) && data.white_background) {
+    const transparent =
+      data.background_transparent === true ||
+      (typeof data.background_color === "string" && ["transparent", "none"].includes(data.background_color.trim().toLowerCase()));
+    if (!transparent && !cssColor(data.background_color) && data.white_background) {
       data.background_color = [255, 255, 255];
     }
     return html`
       <ha-form
         .hass=${this.hass}
         .data=${data}
-        .schema=${schemaFor(powertrain(data.vehicle_type))}
+        .schema=${schemaFor(powertrain(data.vehicle_type), transparent)}
         .computeLabel=${this._computeLabel}
         .computeHelper=${this._computeHelper}
         @value-changed=${this._valueChanged}

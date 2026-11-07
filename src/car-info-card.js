@@ -21,7 +21,7 @@ import {
   unitLabel,
 } from "./vehicle-config.js";
 import { getVehicle } from "./vehicles/index.js";
-import { cssColor } from "./color.js";
+import { cssColor, planBackground } from "./color.js";
 import { padlockIcon, type2Icon } from "./icons.js";
 import "./editor.js";
 
@@ -150,10 +150,12 @@ class CarInfoCard extends LitElement {
   _resolve(value) {
     const id = cleanText(value);
     if (!id) return { configured: false, entityId: "", stateObj: null };
+    const states = this.hass?.states ?? {};
+    const entityId = states[id] ? id : id.toLowerCase();
     return {
       configured: true,
-      entityId: id,
-      stateObj: this.hass?.states?.[id] ?? null,
+      entityId,
+      stateObj: states[entityId] ?? null,
     };
   }
 
@@ -280,7 +282,7 @@ class CarInfoCard extends LitElement {
     const plugEntity = charging.stateObj ? charging.entityId : cable.entityId;
     const vehicle = getVehicle(this._config.car_model);
     const lineColor = cssColor(this._config.line_color);
-    const backgroundColor = cssColor(this._config.background_color) || (this._config.white_background ? "#ffffff" : "");
+    const backgroundColor = planBackground(this._config);
     const battery = this._resolve(this._config.battery_entity);
     const fuel = this._resolve(this._config.fuel_entity);
     const mileage = this._distance("mileage_entity", "mileage_unit");
@@ -296,7 +298,7 @@ class CarInfoCard extends LitElement {
           ${lock.configured
             ? html`
                 <button
-                  class="lock-badge ${locked || "unknown"}"
+                  class="lock-badge ${locked === "unlocked" ? "unlocked" : locked === "locked" ? "locked" : "unknown"}"
                   type="button"
                   aria-label=${locked === "unlocked" ? "Unlocked" : locked === "locked" ? "Locked" : "Lock unknown"}
                   @click=${() => this._openMoreInfo(lock.entityId)}

@@ -31,6 +31,14 @@ export function cssColor(value) {
   return hex(channels);
 }
 
+export function planBackground(config) {
+  if (!config || config.background_transparent === true) return "";
+  if (typeof config.background_color === "string" && ["transparent", "none"].includes(config.background_color.trim().toLowerCase())) {
+    return "";
+  }
+  return cssColor(config.background_color) || (config.white_background ? "#ffffff" : "");
+}
+
 export function lineColorFilter(color) {
   const svg = `<svg xmlns='http://www.w3.org/2000/svg'><filter id='f' color-interpolation-filters='sRGB'><feFlood flood-color='${color}' result='flood'/><feComposite in='flood' in2='SourceAlpha' operator='in'/></filter></svg>`;
   return `url("data:image/svg+xml,${encodeURIComponent(svg)}#f")`;

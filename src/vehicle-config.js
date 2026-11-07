@@ -138,8 +138,18 @@ export function isCharging(stateObj) {
 export function lockStatus(stateObj) {
   const state = normalizedState(stateObj);
   if (!state || isUnavailableState(state)) return "";
-  if (["unlocked", "unlock"].includes(state)) return "unlocked";
-  if (["locked", "lock"].includes(state)) return "locked";
+  const compact = state.replace(/[^a-z0-9]+/g, "");
+  if (state === "unlocked" || compact.endsWith("unlocked") || compact.includes("unlock") || compact.includes("notlocked")) return "unlocked";
+  if (compact.includes("lock")) return "locked";
+
+  const domain = String(stateObj.entity_id ?? "").split(".")[0];
+  const deviceClass = String(stateObj.attributes?.device_class ?? "").trim().toLowerCase();
+  if (domain === "lock" || deviceClass === "lock") {
+    if (["on", "true", "yes", "open", "opened"].includes(state)) return "unlocked";
+    if (["off", "false", "no", "closed", "shut"].includes(state)) return "locked";
+  }
+  if (["on", "true", "yes", "1"].includes(state)) return "locked";
+  if (["off", "false", "no", "0", "open", "opened"].includes(state)) return "unlocked";
   return "";
 }
 
