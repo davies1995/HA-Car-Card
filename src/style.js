@@ -237,19 +237,6 @@ export const styles = css`
     border-radius: 16px;
   }
 
-  .plan.has-line .body,
-  .plan.has-line .hood,
-  .plan.has-line .badge,
-  .plan.has-line .glass,
-  .plan.has-line .window:not(.is-open),
-  .plan.has-line .door-panel,
-  .plan.has-line .boot:not(.is-open),
-  .plan.has-line .roof,
-  .plan.has-line .mirror,
-  .plan.has-line .headlight:not(.is-open) {
-    stroke: var(--car-line);
-  }
-
   .plan-canvas {
     position: relative;
     display: flex;
@@ -292,10 +279,6 @@ export const styles = css`
     top: 28%;
   }
 
-  .plan-canvas.hatchback .charge-plug {
-    top: 66%;
-  }
-
   .charge-plug.charging {
     color: var(--success-color, #43a047);
   }
@@ -305,16 +288,10 @@ export const styles = css`
   }
 
   .plan-canvas > svg {
-    width: 280px;
+    width: 250px;
     max-width: 100%;
     height: auto;
     display: block;
-  }
-
-  .plan-canvas > svg.id3,
-  .plan-canvas > svg.tesla,
-  .plan-canvas > svg.bmw {
-    width: 250px;
   }
 
   .charge-plug .glyph,
@@ -362,126 +339,6 @@ export const styles = css`
   .tesla-zone.interactive,
   .bmw-zone.interactive {
     cursor: pointer;
-  }
-
-  .body {
-    fill: #f7f8fa;
-    stroke: #3e474f;
-    stroke-width: 2;
-    stroke-linejoin: round;
-  }
-
-  .hood {
-    fill: #eef1f4;
-    stroke: #9aa3ab;
-    stroke-width: 1;
-  }
-
-  .badge {
-    fill: #dfe5ea;
-    stroke: #6d7780;
-    stroke-width: 1;
-  }
-
-  .glass,
-  .window {
-    fill: #c5d8e8;
-    stroke: #5f7280;
-    stroke-width: 1.4;
-    stroke-linejoin: round;
-  }
-
-  .window {
-    transition: fill 0.2s ease;
-  }
-
-  .window.is-open {
-    fill: var(--error-color, #e53935);
-    stroke: #b71c1c;
-  }
-
-  .door-panel {
-    fill: #f7f8fa;
-    stroke: #3e474f;
-    stroke-width: 1.6;
-    stroke-linejoin: round;
-  }
-
-  .aperture {
-    fill: #2c3136;
-    stroke: none;
-  }
-
-  .boot {
-    fill: #f7f8fa;
-    stroke: #3e474f;
-    stroke-width: 1.6;
-    stroke-linejoin: round;
-  }
-
-  .boot.is-open {
-    fill: var(--warning-color, #fb8c00);
-    stroke: #e65100;
-  }
-
-  .window.interactive,
-  .door-panel.interactive,
-  .boot.interactive {
-    cursor: pointer;
-  }
-
-  .window:focus-visible,
-  .door-panel:focus-visible,
-  .boot:focus-visible {
-    outline: none;
-    stroke: var(--primary-color);
-    stroke-width: 2.5;
-  }
-
-  .roof {
-    fill: #6d747c;
-    stroke: #555c63;
-    stroke-width: 1;
-  }
-
-  .wheel rect {
-    fill: #2c3136;
-  }
-
-  .wheel .rim {
-    fill: #a3acb4;
-  }
-
-  .mirror {
-    fill: #eceff1;
-    stroke: #3e474f;
-    stroke-width: 1.5;
-  }
-
-  .headlight {
-    fill: #e7eef3;
-    stroke: #90a0aa;
-    stroke-width: 1;
-    stroke-linejoin: round;
-  }
-
-  .headlight.is-open {
-    fill: #fff3b0;
-    stroke: #e6c85a;
-  }
-
-  .headlight.interactive {
-    cursor: pointer;
-  }
-
-  .taillight {
-    fill: #ef9a9a;
-    stroke: #c62828;
-    stroke-width: 0.75;
-  }
-
-  .antenna {
-    fill: #4e555c;
   }
 
   .plan-alert,
@@ -541,8 +398,7 @@ export const styles = css`
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .progress-fill,
-    .window {
+    .progress-fill {
       transition: none;
     }
   }

@@ -1,13 +1,13 @@
 # Car Info Card
 
-A Home Assistant Lovelace card that shows a top-down plan of a vehicle. On the hatchback plan the doors swing open. On the VW ID.3, Tesla Model 3, and BMW 3 Series plans the doors, windows, boot, and headlights are highlighted in place. Windows turn red when they are down, and the boot is highlighted when it is open. The card also shows battery state of charge, mileage, and range, and can convert mileage and range between miles and kilometres.
+A Home Assistant Lovelace card that shows a top-down plan of a vehicle. VW ID.3, Tesla Model 3, and BMW 3 Series use those line drawings, with doors, windows, the boot, and headlights highlighted in place. Windows turn red when they are down, and the boot is highlighted when it is open. The card also shows battery state of charge, mileage, and range, and can convert mileage and range between miles and kilometres.
 
-Choose the plan in the card settings. Hatchback is the drawn plan. VW ID.3, Tesla Model 3, and BMW 3 Series use those line drawings, with doors, windows, the boot, and headlights highlighted in place. The Model 3 charge port is on the left rear. The 3 Series charge port is on the front left.
+Choose the plan in the card settings. The Model 3 charge port is on the left rear. The 3 Series charge port is on the front left.
 
 ## Features
 
 - Configurable top-down plan, with the front at the top
-- Doors drawn open when their entity is on or open
+- Doors, windows, the boot, and headlights highlighted on the line drawing
 - Side windows highlighted red when down, whether the door is open or shut
 - Boot highlighted when open
 - Line colour and background colour for the car plan
@@ -70,7 +70,7 @@ display_unit: mi
 
 Left and right are the vehicle's own left and right. On a right-hand-drive car, the front left door is the passenger side.
 
-A door, window, or the boot counts as open when the entity is `on`, `open`, `down`, or any number above 0. `off`, `closed`, `up`, and `0` stay closed. Windows are drawn red in both the open-door and shut-door positions.
+A door, window, or the boot counts as open when the entity is `on`, `open`, `down`, or any number above 0. `off`, `closed`, `up`, and `0` stay closed. Windows are highlighted red whether the door is open or shut.
 
 The charge connector is shown for an EV or hybrid while the cable entity is connected. It is green when the charging sensor reports `charging`, and red when that sensor reports `not charging`. An ICE vehicle hides charging and shows fuel level instead of battery state of charge. The padlock is red and open when the car is unlocked, and green and closed when it is locked. Matching ignores case, so `Locked` and `UNLOCKED` both work. A binary sensor that is `on` counts as locked. A lock entity, or a binary sensor with the lock device class, follows Home Assistant: `on` is unlocked and `off` is locked.
 
@@ -82,7 +82,7 @@ The charge connector is shown for an EV or hybrid while the cable entity is conn
 | --- | --- |
 | `title` | Card title. Defaults to `My Vehicle`. |
 | `vehicle_type` | `ice`, `ev`, or `hybrid`. Defaults to `ev`. |
-| `car_model` | Plan to draw. `hatchback`, `vw-id3`, `tesla-model-3`, or `bmw-3-series`. |
+| `car_model` | Plan to draw. `vw-id3`, `tesla-model-3`, or `bmw-3-series`. Defaults to `vw-id3`. |
 | `front_left_door_entity` | Front left door. Also `front_right`, `rear_left`, and `rear_right`. |
 | `front_left_window_entity` | Front left window. Also the other three side windows. |
 | `boot_entity` | Boot or tailgate. |
@@ -111,7 +111,7 @@ npm install
 npm run build
 ```
 
-The bundle is written to `dist/car-info-card.js`. To add another vehicle, add a renderer next to `src/vehicles/hatchback.js` and register it in `src/vehicles/index.js` and `VEHICLE_OPTIONS`.
+The bundle is written to `dist/car-info-card.js`. To add another vehicle, add a renderer next to `src/vehicles/vw-id3.js` and register it in `src/vehicles/index.js` and `VEHICLE_OPTIONS`.
 
 ## Releasing
 

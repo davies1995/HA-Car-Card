@@ -43,7 +43,6 @@ export const LOCK_DEF = {
 };
 
 export const VEHICLE_OPTIONS = [
-  { value: "hatchback", label: "Hatchback" },
   { value: "vw-id3", label: "VW ID.3" },
   { value: "tesla-model-3", label: "Tesla Model 3" },
   { value: "bmw-3-series", label: "BMW 3 Series" },

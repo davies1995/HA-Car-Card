@@ -1,17 +1,7 @@
-import { nothing, svg } from "lit";
-import { styleMap } from "lit/directives/style-map.js";
-import { lineColorFilter } from "../color.js";
+import { svg } from "lit";
 
-export function planArt({ href, width, height, lineColor }) {
+export function planArt({ href, width, height }) {
   return svg`
-    <image
-      class="plan-art"
-      href=${href}
-      x="0"
-      y="0"
-      width=${width}
-      height=${height}
-      style=${lineColor ? styleMap({ filter: lineColorFilter(lineColor) }) : nothing}
-    ></image>
+    <image class="plan-art" href=${href} x="0" y="0" width=${width} height=${height}></image>
   `;
 }
