@@ -226,9 +226,22 @@ export const styles = css`
     gap: 8px;
   }
 
-  .plan.on-white .plan-canvas {
-    background: #fff;
+  .plan.has-bg .plan-canvas {
+    background: var(--car-bg);
     border-radius: 16px;
+  }
+
+  .plan.has-line .body,
+  .plan.has-line .hood,
+  .plan.has-line .badge,
+  .plan.has-line .glass,
+  .plan.has-line .window:not(.is-open),
+  .plan.has-line .door-panel,
+  .plan.has-line .boot:not(.is-open),
+  .plan.has-line .roof,
+  .plan.has-line .mirror,
+  .plan.has-line .headlight:not(.is-open) {
+    stroke: var(--car-line);
   }
 
   .plan-canvas {

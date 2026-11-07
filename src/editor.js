@@ -1,4 +1,5 @@
 import { LitElement, html, css } from "lit";
+import { cssColor } from "./color.js";
 import {
   DOOR_DEFS,
   WINDOW_DEFS,
@@ -76,10 +77,16 @@ const VEHICLE_SECTION = section("Vehicle", [
     },
   },
   {
-    name: "white_background",
-    label: "White background",
-    helper: "Fills the plan with white so the black lines stay easy to see.",
-    selector: { boolean: {} },
+    name: "line_color",
+    label: "Line colour",
+    helper: "Colour of the car outline. Leave empty to keep the original black lines.",
+    selector: { color_rgb: {} },
+  },
+  {
+    name: "background_color",
+    label: "Background colour",
+    helper: "Fill behind the car. Leave empty for none. A card that already has the white background keeps it until a colour is chosen here.",
+    selector: { color_rgb: {} },
   },
 ]);
 
@@ -242,6 +249,9 @@ export class CarInfoCardEditor extends LitElement {
     }
 
     const data = { vehicle_type: "ev", ...this._config };
+    if (!cssColor(data.background_color) && data.white_background) {
+      data.background_color = [255, 255, 255];
+    }
     return html`
       <ha-form
         .hass=${this.hass}

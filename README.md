@@ -10,7 +10,7 @@ Choose the plan in the card settings. Hatchback is the drawn plan. VW ID.3, Tesl
 - Doors drawn open when their entity is on or open
 - Side windows highlighted red when down, whether the door is open or shut
 - Boot highlighted when open
-- Optional white background behind the plan, so black lines stay visible
+- Line colour and background colour for the car plan
 - Headlights turn pale yellow when their entity is on
 - Type 2 connector beside the charge port when the cable is connected: green while charging, red when it is not
 - Padlock at the top centre: red and open when unlocked, green and closed when locked
@@ -38,14 +38,15 @@ HACS downloads `car-info-card.js` from the latest GitHub release. Publishing a r
 
 ## Usage
 
-Add **Car Info Card** from the card picker. Choose ICE, EV, or Hybrid under Vehicle type. ICE shows the fuel tank and hides charging. EV shows the battery and charging. Hybrid shows both. The other sections are Doors, Windows, Boot, Headlights, Lock, and Mileage and range.
+Add **Car Info Card** from the card picker. Choose ICE, EV, or Hybrid under Vehicle type. ICE shows the fuel tank and hides charging. EV shows the battery and charging. Hybrid shows both. Line colour and background colour are under Vehicle. The other sections are Doors, Windows, Boot, Headlights, Lock, and Mileage and range.
 
 ```yaml
 type: custom:car-info-card
 title: My Vehicle
 car_model: vw-id3
 vehicle_type: ev
-white_background: true
+line_color: [20, 40, 80]
+background_color: [255, 255, 255]
 front_left_door_entity: binary_sensor.my_car_front_left_door
 front_right_door_entity: binary_sensor.my_car_front_right_door
 rear_left_door_entity: binary_sensor.my_car_rear_left_door
@@ -86,7 +87,9 @@ The charge connector is shown for an EV or hybrid while the cable entity is conn
 | `front_left_window_entity` | Front left window. Also the other three side windows. |
 | `boot_entity` | Boot or tailgate. |
 | `headlights_entity` | Turns both headlights pale yellow when on. |
-| `white_background` | White fill behind the plan. Useful for the VW ID.3 line drawing. |
+| `line_color` | Colour of the car outline, as `[red, green, blue]` from 0 to 255, or a `#rrggbb` colour. Empty keeps the original black lines. |
+| `background_color` | Fill behind the car, in the same form as `line_color`. Empty leaves the card background showing. |
+| `white_background` | Older switch for a white plan fill. Still used when `background_color` is empty. |
 | `charge_cable_entity` | EV and hybrid only. Shows a Type 2 connector beside the charge port when connected, on, or plugged in. |
 | `charging_entity` | EV and hybrid only. Sensor reporting `charging` or `not charging`. The connector is green while charging and red when it is not. |
 | `fuel_entity` | ICE and hybrid only. Fuel tank level as a percentage. |

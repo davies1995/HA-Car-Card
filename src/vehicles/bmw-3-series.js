@@ -1,5 +1,6 @@
 import { nothing, svg } from "lit";
 import { BMW_3_SERIES_PLAN } from "./bmw-3-series-plan.js";
+import { planArt } from "./plan-art.js";
 
 const SIDES = {
   "front-left": {
@@ -52,7 +53,7 @@ function zone(model, kind, points, openWord, onSelect) {
   `;
 }
 
-export function renderBmw3Series({ doors, windows, boot, headlights, summary, onSelect }) {
+export function renderBmw3Series({ doors, windows, boot, headlights, summary, onSelect, lineColor }) {
   return svg`
     <svg class="bmw" viewBox="-1 0 352 800" role="img" aria-label="Top view of a BMW 3 Series, front at the top. ${summary}">
       ${zone(doors["front-left"], "door-zone", SIDES["front-left"].door, "open", onSelect)}
@@ -65,7 +66,7 @@ export function renderBmw3Series({ doors, windows, boot, headlights, summary, on
       ${zone(windows["rear-right"], "window-zone", SIDES["rear-right"].window, "down", onSelect)}
       ${zone(boot, "boot-zone", BOOT, "open", onSelect)}
       ${HEADLIGHTS.map((points) => zone(headlights, "light-zone", points, "on", onSelect))}
-      <image class="plan-art" href=${BMW_3_SERIES_PLAN} x="0" y="0" width="352" height="800"></image>
+      ${planArt({ href: BMW_3_SERIES_PLAN, width: 352, height: 800, lineColor })}
     </svg>
   `;
 }

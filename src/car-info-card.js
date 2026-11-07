@@ -21,6 +21,7 @@ import {
   unitLabel,
 } from "./vehicle-config.js";
 import { getVehicle } from "./vehicles/index.js";
+import { cssColor } from "./color.js";
 import { padlockIcon, type2Icon } from "./icons.js";
 import "./editor.js";
 
@@ -278,6 +279,8 @@ class CarInfoCard extends LitElement {
       chargingNow === false ? "Charge cable connected, not charging" : chargingNow ? "Charge cable connected, charging" : "Charge cable connected";
     const plugEntity = charging.stateObj ? charging.entityId : cable.entityId;
     const vehicle = getVehicle(this._config.car_model);
+    const lineColor = cssColor(this._config.line_color);
+    const backgroundColor = cssColor(this._config.background_color) || (this._config.white_background ? "#ffffff" : "");
     const battery = this._resolve(this._config.battery_entity);
     const fuel = this._resolve(this._config.fuel_entity);
     const mileage = this._distance("mileage_entity", "mileage_unit");
@@ -303,13 +306,20 @@ class CarInfoCard extends LitElement {
               `
             : nothing}
         </div>
-        <figure class="plan ${this._config.white_background ? "on-white" : ""}">
+        <figure
+          class="plan ${lineColor ? "has-line" : ""} ${backgroundColor ? "has-bg" : ""}"
+          style=${styleMap({
+            ...(lineColor ? { "--car-line": lineColor } : {}),
+            ...(backgroundColor ? { "--car-bg": backgroundColor } : {}),
+          })}
+        >
           <div class="plan-canvas ${vehicle.id}${cableConnected ? " has-plug" : ""}">
             ${vehicle.render({
               doors,
               windows,
               boot,
               headlights,
+              lineColor,
               summary,
               onSelect: (entityId) => this._openMoreInfo(entityId),
             })}
