@@ -47,11 +47,11 @@ export const styles = css`
   }
 
   .lock-badge.unlocked {
-    color: var(--success-color, #43a047);
+    color: var(--error-color, #e53935);
   }
 
   .lock-badge.locked {
-    color: var(--error-color, #e53935);
+    color: var(--success-color, #43a047);
   }
 
   .lock-badge.unknown {
