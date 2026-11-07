@@ -270,6 +270,7 @@ class CarInfoCard extends LitElement {
     if (!this.hass || !this._config) return html``;
 
     const title = cleanText(this._config.title) || "My Vehicle";
+    const registration = cleanText(this._config.car_registration);
     const doors = Object.fromEntries(DOOR_DEFS.map((definition) => [definition.id, this._panel(definition)]));
     const windows = Object.fromEntries(WINDOW_DEFS.map((definition) => [definition.id, this._panel(definition)]));
     const boot = this._panel(BOOT_DEF);
@@ -324,6 +325,14 @@ class CarInfoCard extends LitElement {
                 >
                   ${padlockIcon(locked === "unlocked")}
                 </button>
+              `
+            : nothing}
+          ${registration
+            ? html`
+                <div class="plate" aria-label="Registration ${registration}">
+                  <span class="plate-band" aria-hidden="true">UK</span>
+                  <span class="plate-text">${registration}</span>
+                </div>
               `
             : nothing}
         </div>

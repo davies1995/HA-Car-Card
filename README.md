@@ -14,6 +14,7 @@ Choose the plan in the card settings. The Model 3 charge port is on the left rea
 - Headlights turn pale yellow when their entity is on
 - Type 2 connector beside the charge port when the cable is connected: green while charging, red when it is not
 - Padlock at the top centre: red and open when unlocked, green and closed when locked
+- British number plate in the top right, using the car registration from the card settings
 - Vehicle type: ICE shows fuel tank level, EV shows battery and charging, Hybrid shows both
 - Battery or fuel percentage with a level bar
 - Mileage and range, each with its own source unit, converted into the display unit you choose
@@ -43,6 +44,7 @@ Add **Car Info Card** from the card picker. Choose ICE, EV, or Hybrid under Vehi
 ```yaml
 type: custom:car-info-card
 title: My Vehicle
+car_registration: AB12 CDE
 car_model: vw-id3
 vehicle_type: ev
 line_color: [20, 40, 80]
@@ -81,6 +83,7 @@ The charge connector is shown for an EV or hybrid while the cable entity is conn
 | Option | Description |
 | --- | --- |
 | `title` | Card title. Defaults to `My Vehicle`. |
+| `car_registration` | Registration shown on a British number plate in the top right. |
 | `vehicle_type` | `ice`, `ev`, or `hybrid`. Defaults to `ev`. |
 | `car_model` | Plan to draw. `vw-id3`, `tesla-model-3`, or `bmw-3-series`. Defaults to `vw-id3`. |
 | `front_left_door_entity` | Front left door. Also `front_right`, `rear_left`, and `rear_right`. |
