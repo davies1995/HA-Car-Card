@@ -136,7 +136,7 @@ function schemaFor(type) {
       entityField(
         LOCK_DEF.key,
         "Lock",
-        'Sensor that reports "locked" or "unlocked". A green open padlock means unlocked, and a red padlock means locked.'
+        'Sensor that reports "locked" or "unlocked". A red open padlock means unlocked, and a green closed padlock means locked.'
       ),
     ])
   );

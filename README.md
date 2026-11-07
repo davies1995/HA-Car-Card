@@ -13,7 +13,7 @@ Choose the plan in the card settings. Hatchback is the drawn plan. VW ID.3, Tesl
 - Optional white background behind the plan, so black lines stay visible
 - Headlights turn pale yellow when their entity is on
 - Type 2 connector beside the charge port when the cable is connected: green while charging, red when it is not
-- Padlock at the top centre: green and open when unlocked, red when locked
+- Padlock at the top centre: red and open when unlocked, green and closed when locked
 - Vehicle type: ICE shows fuel tank level, EV shows battery and charging, Hybrid shows both
 - Battery or fuel percentage with a level bar
 - Mileage and range, each with its own source unit, converted into the display unit you choose
@@ -71,7 +71,7 @@ Left and right are the vehicle's own left and right. On a right-hand-drive car, 
 
 A door, window, or the boot counts as open when the entity is `on`, `open`, `down`, or any number above 0. `off`, `closed`, `up`, and `0` stay closed. Windows are drawn red in both the open-door and shut-door positions.
 
-The charge connector is shown for an EV or hybrid while the cable entity is connected. It is green when the charging sensor reports `charging`, and red when that sensor reports `not charging`. An ICE vehicle hides charging and shows fuel level instead of battery state of charge. The padlock is green and open for `unlocked`, and red for `locked`.
+The charge connector is shown for an EV or hybrid while the cable entity is connected. It is green when the charging sensor reports `charging`, and red when that sensor reports `not charging`. An ICE vehicle hides charging and shows fuel level instead of battery state of charge. The padlock is red and open for `unlocked`, and green and closed for `locked`.
 
 `mileage_unit` and `range_unit` are the units those entities report. `display_unit` is what the card shows. If they differ, the card converts the value. One mile is treated as 1.609344 kilometres.
 
@@ -90,7 +90,7 @@ The charge connector is shown for an EV or hybrid while the cable entity is conn
 | `charge_cable_entity` | EV and hybrid only. Shows a Type 2 connector beside the charge port when connected, on, or plugged in. |
 | `charging_entity` | EV and hybrid only. Sensor reporting `charging` or `not charging`. The connector is green while charging and red when it is not. |
 | `fuel_entity` | ICE and hybrid only. Fuel tank level as a percentage. |
-| `lock_entity` | Sensor reporting `locked` or `unlocked`. Green open padlock when unlocked, red padlock when locked. |
+| `lock_entity` | Sensor reporting `locked` or `unlocked`. Red open padlock when unlocked, green closed padlock when locked. |
 | `battery_entity` | EV and hybrid only. Battery state of charge, usually a percentage. |
 | `mileage_entity` | Odometer. |
 | `mileage_unit` | `mi` or `km`, the unit that entity reports. |
