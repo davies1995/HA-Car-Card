@@ -12,27 +12,20 @@ const e=globalThis,t=e.ShadowRoot&&(void 0===e.ShadyCSS||e.ShadyCSS.nativeShadow
   }
 
   .card-header {
-    position: relative;
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     align-items: center;
     min-height: 40px;
-    gap: 12px;
+    column-gap: 12px;
     font-size: 1.2rem;
     font-weight: 500;
     margin-bottom: 16px;
     color: var(--primary-text-color);
   }
 
-  .card-header:has(.lock-badge) .header-title,
-  .card-header:has(.plate) .header-title {
-    max-width: calc(50% - 28px);
-  }
-
   .lock-badge {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    grid-column: 2;
+    justify-self: center;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -77,10 +70,12 @@ const e=globalThis,t=e.ShadowRoot&&(void 0===e.ShadyCSS||e.ShadyCSS.nativeShadow
   }
 
   .header-title {
+    grid-column: 1;
+    justify-self: start;
     display: flex;
     align-items: center;
-    gap: 8px;
     min-width: 0;
+    max-width: 100%;
   }
 
   .header-title span {
@@ -90,29 +85,31 @@ const e=globalThis,t=e.ShadowRoot&&(void 0===e.ShadyCSS||e.ShadyCSS.nativeShadow
   }
 
   .plate {
-    margin-left: auto;
+    grid-column: 3;
+    justify-self: end;
+    align-self: center;
+    box-sizing: border-box;
     display: inline-flex;
-    align-items: stretch;
-    height: 32px;
-    max-width: 46%;
+    align-items: center;
+    height: 36px;
+    max-width: 100%;
     border: 2px solid #111;
     border-radius: 5px;
     overflow: hidden;
     background: #f5c400;
-    flex: 0 0 auto;
   }
 
   .plate-band {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: center;
+    align-self: stretch;
     width: 16px;
     background: #003399;
     color: #fff;
     font-size: 8px;
     font-weight: 700;
     line-height: 1;
-    padding-bottom: 3px;
   }
 
   .plate-text {
@@ -123,7 +120,7 @@ const e=globalThis,t=e.ShadowRoot&&(void 0===e.ShadyCSS||e.ShadyCSS.nativeShadow
     font-weight: 700;
     font-size: 16px;
     letter-spacing: 0.08em;
-    line-height: 28px;
+    line-height: 1;
     text-transform: uppercase;
     white-space: nowrap;
     overflow: hidden;
