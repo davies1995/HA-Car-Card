@@ -25,8 +25,9 @@ export const styles = css`
     color: var(--primary-text-color);
   }
 
-  .card-header:has(.lock-badge) .header-title {
-    max-width: calc(50% - 24px);
+  .card-header:has(.lock-badge) .header-title,
+  .card-header:has(.plate) .header-title {
+    max-width: calc(50% - 28px);
   }
 
   .lock-badge {
@@ -88,6 +89,47 @@ export const styles = css`
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  .plate {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: stretch;
+    height: 32px;
+    max-width: 46%;
+    border: 2px solid #111;
+    border-radius: 5px;
+    overflow: hidden;
+    background: #f5c400;
+    flex: 0 0 auto;
+  }
+
+  .plate-band {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: 16px;
+    background: #003399;
+    color: #fff;
+    font-size: 8px;
+    font-weight: 700;
+    line-height: 1;
+    padding-bottom: 3px;
+  }
+
+  .plate-text {
+    min-width: 0;
+    padding: 0 8px;
+    color: #111;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0.08em;
+    line-height: 28px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .header-title ha-icon {

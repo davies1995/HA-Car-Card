@@ -56,6 +56,12 @@ function vehicleSection(transparent) {
   const fields = [
     { name: "title", label: "Card title", selector: { text: {} } },
     {
+      name: "car_registration",
+      label: "Car registration",
+      helper: "Shown on a British number plate in the top right of the card.",
+      selector: { text: {} },
+    },
+    {
       name: "vehicle_type",
       label: "Vehicle type",
       helper: "ICE shows the fuel tank and hides charging. EV shows the battery and charging. Hybrid shows both.",
