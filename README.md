@@ -72,7 +72,7 @@ Left and right are the vehicle's own left and right. On a right-hand-drive car, 
 
 A door, window, or the boot counts as open when the entity is `on`, `open`, `down`, or any number above 0. `off`, `closed`, `up`, and `0` stay closed. Windows are drawn red in both the open-door and shut-door positions.
 
-The charge connector is shown for an EV or hybrid while the cable entity is connected. It is green when the charging sensor reports `charging`, and red when that sensor reports `not charging`. An ICE vehicle hides charging and shows fuel level instead of battery state of charge. The padlock is red and open for `unlocked`, and green and closed for `locked`.
+The charge connector is shown for an EV or hybrid while the cable entity is connected. It is green when the charging sensor reports `charging`, and red when that sensor reports `not charging`. An ICE vehicle hides charging and shows fuel level instead of battery state of charge. The padlock is red and open when the car is unlocked, and green and closed when it is locked. Matching ignores case, so `Locked` and `UNLOCKED` both work. A binary sensor that is `on` counts as locked. A lock entity, or a binary sensor with the lock device class, follows Home Assistant: `on` is unlocked and `off` is locked.
 
 `mileage_unit` and `range_unit` are the units those entities report. `display_unit` is what the card shows. If they differ, the card converts the value. One mile is treated as 1.609344 kilometres.
 
@@ -88,12 +88,13 @@ The charge connector is shown for an EV or hybrid while the cable entity is conn
 | `boot_entity` | Boot or tailgate. |
 | `headlights_entity` | Turns both headlights pale yellow when on. |
 | `line_color` | Colour of the car outline, as `[red, green, blue]` from 0 to 255, or a `#rrggbb` colour. Empty keeps the original black lines. |
-| `background_color` | Fill behind the car, in the same form as `line_color`. Empty leaves the card background showing. |
-| `white_background` | Older switch for a white plan fill. Still used when `background_color` is empty. |
+| `background_color` | Fill behind the car, in the same form as `line_color`. Empty, `transparent`, or `none` leaves the card background showing. |
+| `background_transparent` | No fill behind the car, even when a background colour or the older white background is set. |
+| `white_background` | Older switch for a white plan fill. Still used when no background colour is set and the background is not transparent. |
 | `charge_cable_entity` | EV and hybrid only. Shows a Type 2 connector beside the charge port when connected, on, or plugged in. |
 | `charging_entity` | EV and hybrid only. Sensor reporting `charging` or `not charging`. The connector is green while charging and red when it is not. |
 | `fuel_entity` | ICE and hybrid only. Fuel tank level as a percentage. |
-| `lock_entity` | Sensor reporting `locked` or `unlocked`. Red open padlock when unlocked, green closed padlock when locked. |
+| `lock_entity` | Lock, binary sensor, or sensor. `locked` and `unlocked` match in any case. Red open padlock when unlocked, green closed padlock when locked. |
 | `battery_entity` | EV and hybrid only. Battery state of charge, usually a percentage. |
 | `mileage_entity` | Odometer. |
 | `mileage_unit` | `mi` or `km`, the unit that entity reports. |

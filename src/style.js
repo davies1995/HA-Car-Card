@@ -46,12 +46,18 @@ export const styles = css`
     cursor: pointer;
   }
 
-  .lock-badge.unlocked {
-    color: var(--error-color, #e53935);
+  .lock-badge.unlocked,
+  .lock-badge.unlocked .glyph,
+  .lock-badge.unlocked .glyph path {
+    color: #e53935;
+    fill: #e53935;
   }
 
-  .lock-badge.locked {
-    color: var(--success-color, #43a047);
+  .lock-badge.locked,
+  .lock-badge.locked .glyph,
+  .lock-badge.locked .glyph path {
+    color: #43a047;
+    fill: #43a047;
   }
 
   .lock-badge.unknown {
