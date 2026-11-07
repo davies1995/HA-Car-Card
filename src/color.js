@@ -38,8 +38,3 @@ export function planBackground(config) {
   }
   return cssColor(config.background_color) || (config.white_background ? "#ffffff" : "");
 }
-
-export function lineColorFilter(color) {
-  const svg = `<svg xmlns='http://www.w3.org/2000/svg'><filter id='f' color-interpolation-filters='sRGB'><feFlood flood-color='${color}' result='flood'/><feComposite in='flood' in2='SourceAlpha' operator='in'/></filter></svg>`;
-  return `url("data:image/svg+xml,${encodeURIComponent(svg)}#f")`;
-}

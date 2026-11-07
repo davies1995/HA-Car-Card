@@ -80,7 +80,7 @@ function vehicleSection(transparent) {
     {
       name: "line_color",
       label: "Line colour",
-      helper: "Colour of the car outline. Leave empty to keep the original black lines.",
+      helper: "Recolours the lines in the VW ID.3, Tesla Model 3, and BMW 3 Series drawings. Leave empty to keep them black.",
       selector: { color_rgb: {} },
     },
     {

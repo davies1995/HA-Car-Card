@@ -53,7 +53,7 @@ function zone(model, kind, points, openWord, onSelect) {
   `;
 }
 
-export function renderTeslaModel3({ doors, windows, boot, headlights, summary, onSelect, lineColor }) {
+export function renderTeslaModel3({ doors, windows, boot, headlights, summary, onSelect, artHref }) {
   return svg`
     <svg class="tesla" viewBox="2 0 401 800" role="img" aria-label="Top view of a Tesla Model 3, front at the top. ${summary}">
       ${zone(doors["front-left"], "door-zone", SIDES["front-left"].door, "open", onSelect)}
@@ -66,7 +66,7 @@ export function renderTeslaModel3({ doors, windows, boot, headlights, summary, o
       ${zone(windows["rear-right"], "window-zone", SIDES["rear-right"].window, "down", onSelect)}
       ${zone(boot, "boot-zone", BOOT, "open", onSelect)}
       ${HEADLIGHTS.map((points) => zone(headlights, "light-zone", points, "on", onSelect))}
-      ${planArt({ href: TESLA_MODEL_3_PLAN, width: 401, height: 800, lineColor })}
+      ${planArt({ href: artHref || TESLA_MODEL_3_PLAN, width: 401, height: 800 })}
     </svg>
   `;
 }
