@@ -1,5 +1,6 @@
 import { nothing, svg } from "lit";
 import { VW_ID3_PLAN } from "./vw-id3-plan.js";
+import { planArt } from "./plan-art.js";
 
 const SIDES = {
   "front-left": {
@@ -52,7 +53,7 @@ function zone(model, kind, points, openWord, onSelect) {
   `;
 }
 
-export function renderVwId3({ doors, windows, boot, headlights, summary, onSelect }) {
+export function renderVwId3({ doors, windows, boot, headlights, summary, onSelect, lineColor }) {
   return svg`
     <svg class="id3" viewBox="14 0 424 912" role="img" aria-label="Top view of a VW ID.3, front at the top. ${summary}">
       ${zone(doors["front-left"], "door-zone", SIDES["front-left"].door, "open", onSelect)}
@@ -64,7 +65,7 @@ export function renderVwId3({ doors, windows, boot, headlights, summary, onSelec
       ${zone(windows["rear-left"], "window-zone", SIDES["rear-left"].window, "down", onSelect)}
       ${zone(windows["rear-right"], "window-zone", SIDES["rear-right"].window, "down", onSelect)}
       ${HEADLIGHTS.map((points) => zone(headlights, "light-zone", points, "on", onSelect))}
-      <image class="plan-art" href=${VW_ID3_PLAN} x="0" y="0" width="424" height="912"></image>
+      ${planArt({ href: VW_ID3_PLAN, width: 424, height: 912, lineColor })}
       ${zone(boot, "boot-zone", BOOT, "open", onSelect)}
     </svg>
   `;
