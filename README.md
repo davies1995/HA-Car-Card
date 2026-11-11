@@ -1,5 +1,9 @@
 # Car Info Card
 
+<p align="center">
+  <img src="icon.png" alt="Car Info Card icon" width="128" height="128">
+</p>
+
 A Home Assistant Lovelace card that shows a top-down plan of a vehicle. VW ID.3, Tesla Model 3, and BMW 3 Series use those line drawings, with doors, windows, the boot, and headlights highlighted in place. Windows turn red when they are down, and the boot is highlighted when it is open. The card also shows battery state of charge, mileage, and range, and can convert mileage and range between miles and kilometres.
 
 Choose the plan in the card settings. The Model 3 charge port is on the left rear. The 3 Series charge port is on the front left.
